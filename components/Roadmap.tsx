@@ -1,27 +1,27 @@
 const phases = [
   {
     tag: "Phase 01",
-    title: "Foundation",
+    title: "Game Live",
     status: "complete",
-    items: ["Smart contract development", "Coinsult audit", "Telegram Mini App alpha", "Community seeding"],
+    items: ["Telegram mini app live", "Server-authoritative engine", "10-tier progression + skins", "Ads, upgrades, referrals, leaderboard"],
   },
   {
     tag: "Phase 02",
-    title: "Presale & Launch",
+    title: "TON & Presale",
     status: "active",
-    items: ["Phase 1 presale (live)", "Liquidity lock via PinkSale", "DEX listing", "CEX outreach"],
+    items: ["SANS jetton on TON (testnet)", "TON Connect wallet + payments", "Phase 1 presale", "Monetag ad monetization"],
   },
   {
     tag: "Phase 03",
-    title: "Ecosystem Growth",
+    title: "Mainnet & Growth",
     status: "upcoming",
-    items: ["P2E reward pools", "Advertiser partner onboarding", "Mobile app beta", "Staking module"],
+    items: ["Mainnet jetton (fixed supply)", "DEX liquidity on TON", "Security audit", "Advertiser partnerships"],
   },
   {
     tag: "Phase 04",
     title: "Scale",
     status: "upcoming",
-    items: ["Multichain expansion", "DAO governance", "Tier-1 CEX listings", "Buyback automation v2"],
+    items: ["On-chain rewards / airdrop", "Staking & buyback automation", "CEX listings", "DAO governance"],
   },
 ];
 

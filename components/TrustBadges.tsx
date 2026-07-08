@@ -1,20 +1,21 @@
-import { ShieldCheck, Lock, FileCheck2 } from "lucide-react";
+import { ShieldCheck, Server, Send } from "lucide-react";
+import { SITE } from "@/config/site";
 
 const badges = [
   {
-    icon: FileCheck2,
-    title: "Audited by Coinsult",
-    desc: "Smart contract independently reviewed for vulnerabilities and ownership risk.",
-  },
-  {
-    icon: Lock,
-    title: "Liquidity Locked",
-    desc: "Initial liquidity locked via PinkSale for 12 months post-launch.",
+    icon: Server,
+    title: "Server-authoritative",
+    desc: "Balances, energy and rewards are computed and validated on the server — no client-side tampering.",
   },
   {
     icon: ShieldCheck,
-    title: "100% Secure",
-    desc: "No mint function, renounced post-launch upgrade keys, verified source code.",
+    title: "Fixed supply on TON",
+    desc: "1B $SANS jetton on TON with anti-abuse rewarded ads (server-verified) and rate-limited earning.",
+  },
+  {
+    icon: Send,
+    title: "Live & open",
+    desc: "Playable right now inside Telegram — no install, no signup. Try it before you buy.",
   },
 ];
 
@@ -23,7 +24,7 @@ export default function TrustBadges() {
     <section className="border-b border-ink-700/60 py-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <p className="text-center font-mono text-xs uppercase tracking-[0.2em] text-ink-500">
-          Security &amp; Trust
+          Why SANS
         </p>
 
         <div className="mt-10 grid gap-5 sm:grid-cols-3">
@@ -39,6 +40,17 @@ export default function TrustBadges() {
               <p className="text-sm text-ink-400">{b.desc}</p>
             </div>
           ))}
+        </div>
+
+        <div className="mt-10 flex justify-center">
+          <a
+            href={SITE.botUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-md border border-ink-600 px-6 py-3 text-sm font-semibold text-ink-100 transition-colors hover:border-signal/60 hover:text-signal"
+          >
+            🐺 Play SANS free in Telegram
+          </a>
         </div>
       </div>
     </section>

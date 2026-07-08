@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, X, Terminal } from "lucide-react";
-import ConnectWalletButton from "./ConnectWalletButton";
+import { Menu, X, Play } from "lucide-react";
+import { SITE } from "@/config/site";
 
 const links = [
+  { label: "How it works", href: "#how" },
+  { label: "Features", href: "#features" },
   { label: "Tokenomics", href: "#tokenomics" },
   { label: "Roadmap", href: "#roadmap" },
-  { label: "Whitepaper", href: "/sans-token-whitepaper.pdf" },
+  { label: "Presale", href: "#presale" },
 ];
 
 export default function Navbar() {
@@ -17,9 +19,9 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 border-b border-ink-700/60 bg-ink-950/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2 group">
-          <span className="relative flex h-8 w-8 items-center justify-center rounded-md border border-signal/40 bg-ink-900 group-hover:shadow-signal transition-shadow">
-            <Terminal size={16} className="text-signal" />
+        <a href="#" className="group flex items-center gap-2">
+          <span className="relative flex h-8 w-8 items-center justify-center rounded-md border border-signal/40 bg-ink-900 text-lg transition-shadow group-hover:shadow-signal">
+            🐺
           </span>
           <span className="font-display text-lg font-bold tracking-[0.15em] text-ink-50">
             SANS
@@ -39,13 +41,18 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <div className="hidden md:block">
-          <ConnectWalletButton />
-        </div>
+        <a
+          href={SITE.botUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hidden items-center gap-2 rounded-md bg-signal px-5 py-2.5 text-sm font-semibold tracking-wide text-ink-950 transition-all hover:bg-signal-glow hover:shadow-signal active:scale-[0.98] md:inline-flex"
+        >
+          <Play size={15} /> Play Free
+        </a>
 
         {/* Mobile toggle */}
         <button
-          className="md:hidden text-ink-100"
+          className="text-ink-100 md:hidden"
           onClick={() => setOpen(!open)}
           aria-label="Toggle navigation menu"
           aria-expanded={open}
@@ -68,9 +75,14 @@ export default function Navbar() {
                 {l.label}
               </a>
             ))}
-            <div className="pt-2">
-              <ConnectWalletButton fullWidth />
-            </div>
+            <a
+              href={SITE.botUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-1 inline-flex items-center justify-center gap-2 rounded-md bg-signal px-5 py-3 text-sm font-semibold tracking-wide text-ink-950"
+            >
+              <Play size={15} /> Play Free
+            </a>
           </nav>
         </div>
       )}

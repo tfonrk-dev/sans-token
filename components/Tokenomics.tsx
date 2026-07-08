@@ -42,9 +42,10 @@ export default function Tokenomics() {
             Tokenomics
           </h2>
           <p className="mt-4 text-ink-300">
-            A fixed, transparent supply designed to fund growth without
-            diluting holders — backed by a deflationary buyback mechanism
-            that retires SANS from circulation over time.
+            $SANS is a 1B fixed-supply jetton on TON — transparent allocation
+            designed to fund growth without diluting holders, backed by a
+            deflationary buyback that retires SANS from circulation as the game
+            grows.
           </p>
         </div>
 
