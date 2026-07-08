@@ -54,7 +54,7 @@ export default function Hero() {
         {/* wolf mascot */}
         <div className="flex justify-center">
           <div className="relative w-full max-w-sm">
-            <div className="absolute inset-x-6 bottom-6 top-10 rounded-chunk bg-gradient-to-b from-sky-200 to-sky-100 shadow-pop" />
+            <div className="absolute inset-x-6 bottom-6 top-10 rounded-chunk bg-gradient-to-b from-sky-200 to-sky-100 shadow-pop dark:from-night-soft dark:to-night-card" />
             <div className="relative px-8 pt-6">
               <div className="animate-floaty">
                 <img src="/wolf.png" alt="SANS kurdu" className="mx-auto w-64 drop-shadow-[0_18px_20px_rgba(20,40,80,0.25)]" draggable={false} />

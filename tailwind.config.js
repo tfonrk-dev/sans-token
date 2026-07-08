@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: "class",
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -7,6 +8,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        night: { DEFAULT: "#0a1424", card: "#0f1c30", soft: "#16273f" },
         // Playful game palette (matches the SANS mini app)
         navy: "#27406b",
         slate: "#5a6b85",

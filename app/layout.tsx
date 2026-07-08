@@ -40,8 +40,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${fredoka.variable} ${nunito.variable}`}>
-      <body className="font-body antialiased">{children}</body>
+    <html lang="en" suppressHydrationWarning className={`${fredoka.variable} ${nunito.variable}`}>
+      <body className="font-body antialiased">
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{var t=localStorage.getItem('sans-theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}})();",
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

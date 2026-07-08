@@ -13,10 +13,40 @@ body {
   background-attachment: fixed;
 }
 
+.dark body {
+  color: #e6f0ff;
+  background: #0a1424;
+  background-image: linear-gradient(180deg, #0d1c33 0%, #0a1424 55%, #070f1c 100%);
+}
+
 ::selection {
   background: rgba(59, 157, 255, 0.25);
   color: #27406b;
 }
+.dark ::selection {
+  color: #fff;
+}
+.dark ::-webkit-scrollbar-track {
+  background: #0f1c30;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #24405f;
+}
+
+/* Dark-mode surface + text mapping (overrides the light utility classes so every
+   card/section flips without editing each component). Accents (sun/sea/leaf) stay. */
+.dark .bg-white { background-color: #0f1c30 !important; }
+.dark .bg-cream { background-color: #0a1424 !important; }
+.dark .bg-sky-50 { background-color: rgba(255, 255, 255, 0.05) !important; }
+.dark .text-navy { color: #eaf3ff !important; }
+.dark .text-slate { color: rgba(199, 224, 255, 0.78) !important; }
+.dark .text-mute { color: rgba(160, 190, 230, 0.5) !important; }
+.dark .border-sky-100,
+.dark .border-sky-200,
+.dark .border-sky-200\/70 { border-color: rgba(255, 255, 255, 0.1) !important; }
+/* soften the big drop-shadows on dark cards */
+.dark .shadow-pop,
+.dark .shadow-pop-sm { box-shadow: 0 6px 22px rgba(0, 0, 0, 0.45) !important; }
 
 ::-webkit-scrollbar {
   width: 10px;
