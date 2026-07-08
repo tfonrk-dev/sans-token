@@ -2,36 +2,32 @@ import { Send, Twitter, Instagram, Play } from "lucide-react";
 import { SITE } from "@/config/site";
 
 const socials = [
-  { href: SITE.telegram, label: "SANS on Telegram", icon: Send },
-  { href: SITE.twitter, label: "SANS on Twitter", icon: Twitter },
-  { href: SITE.instagram, label: "SANS on Instagram", icon: Instagram },
+  { href: SITE.telegram, label: "Telegram", icon: Send },
+  { href: SITE.twitter, label: "Twitter", icon: Twitter },
+  { href: SITE.instagram, label: "Instagram", icon: Instagram },
 ];
 
 export default function Footer() {
   return (
-    <footer className="bg-ink-950">
-      <div className="mx-auto max-w-7xl px-6 py-14 lg:px-8">
+    <footer className="border-t border-sky-200/70 bg-cream">
+      <div className="mx-auto max-w-7xl px-5 py-12 lg:px-8">
         <div className="flex flex-col items-start justify-between gap-8 sm:flex-row">
           <div>
             <div className="flex items-center gap-2">
-              <span className="flex h-7 w-7 items-center justify-center rounded-md border border-signal/40 bg-ink-900 text-sm">
-                🐺
-              </span>
-              <span className="font-display text-base font-bold tracking-[0.15em] text-ink-50">
-                SANS
-              </span>
+              <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-b from-sky-100 to-sky-200 text-lg shadow-pop-sm">🐺</span>
+              <span className="font-display text-lg font-bold tracking-wide text-navy">SANS</span>
             </div>
-            <p className="mt-3 max-w-sm text-sm text-ink-400">
-              Feed the wolf. Earn $SANS on TON. A Telegram tap-to-earn game built
-              on transparency and real engagement.
+            <p className="mt-3 max-w-sm text-sm font-semibold text-slate">
+              Kurdu besle, TON&apos;da $SANS kazan. Şeffaflık ve gerçek etkileşim üzerine
+              kurulu bir Telegram tap-to-earn oyunu.
             </p>
             <a
               href={SITE.botUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 inline-flex items-center gap-2 rounded-md bg-signal px-4 py-2 text-sm font-semibold text-ink-950 transition-all hover:bg-signal-glow"
+              className="mt-4 inline-flex items-center gap-2 rounded-2xl bg-sun px-4 py-2.5 text-sm font-extrabold text-[#5a3a00] shadow-sun"
             >
-              <Play size={14} /> Play Free
+              <Play size={14} /> Oyna
             </a>
           </div>
 
@@ -43,28 +39,25 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={s.label}
-                className="flex h-10 w-10 items-center justify-center rounded-md border border-ink-700 text-ink-300 transition-colors hover:border-signal/50 hover:text-signal"
+                className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-slate shadow-pop-sm transition-colors hover:text-sea"
               >
-                <s.icon size={16} />
+                <s.icon size={18} />
               </a>
             ))}
           </div>
         </div>
 
-        <div className="mt-10 border-t border-ink-800 pt-8">
-          <p className="text-xs leading-relaxed text-ink-500">
-            <span className="font-semibold text-ink-400">Disclaimer:</span> SANS
-            is a utility token for use within the SANS ecosystem (game rewards,
-            ad-engagement, and ecosystem access). It is not a security,
-            investment contract, or financial instrument, and holding SANS does
-            not represent equity, profit-sharing, or ownership in any entity.
-            Cryptocurrency involves risk, including potential loss of principal.
-            Nothing on this site is financial advice — do your own research
-            before participating in the presale.
+        <div className="mt-10 border-t border-sky-100 pt-6">
+          <p className="text-xs font-medium leading-relaxed text-mute">
+            <span className="font-bold text-slate">Sorumluluk reddi:</span> SANS, SANS
+            ekosistemi içinde kullanım için bir yardımcı token&apos;dır (oyun ödülleri,
+            reklam etkileşimi ve ekosistem erişimi). Bir menkul kıymet, yatırım
+            sözleşmesi veya finansal araç değildir ve SANS tutmak herhangi bir
+            varlıkta hisse/kâr payı/mülkiyet temsil etmez. Kripto para riski, anaparanın
+            kaybı dahil, içerir. Bu sitedeki hiçbir şey finansal tavsiye değildir —
+            ön satışa katılmadan önce kendi araştırmanı yap.
           </p>
-          <p className="mt-4 text-xs text-ink-600">
-            © 2026 SANS · {SITE.domain} · All rights reserved.
-          </p>
+          <p className="mt-4 text-xs font-bold text-mute">© 2026 SANS · {SITE.domain}</p>
         </div>
       </div>
     </footer>

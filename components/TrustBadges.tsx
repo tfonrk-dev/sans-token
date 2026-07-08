@@ -2,42 +2,24 @@ import { ShieldCheck, Server, Send } from "lucide-react";
 import { SITE } from "@/config/site";
 
 const badges = [
-  {
-    icon: Server,
-    title: "Server-authoritative",
-    desc: "Balances, energy and rewards are computed and validated on the server — no client-side tampering.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Fixed supply on TON",
-    desc: "1B $SANS jetton on TON with anti-abuse rewarded ads (server-verified) and rate-limited earning.",
-  },
-  {
-    icon: Send,
-    title: "Live & open",
-    desc: "Playable right now inside Telegram — no install, no signup. Try it before you buy.",
-  },
+  { icon: Server, color: "bg-sea", title: "Sunucu doğrulamalı", desc: "Bakiye, enerji ve ödüller sunucuda hesaplanır ve doğrulanır — istemci kurcalanamaz." },
+  { icon: ShieldCheck, color: "bg-leaf", title: "TON'da sabit arz", desc: "1 milyar $SANS jetton; sunucu-doğrulamalı, kötüye-kullanıma-dirençli ödüllü reklamlar." },
+  { icon: Send, color: "bg-berry", title: "Canlı & açık", desc: "Şu an Telegram'da oynanabilir — kurulum yok, kayıt yok. Almadan önce dene." },
 ];
 
 export default function TrustBadges() {
   return (
-    <section className="border-b border-ink-700/60 py-20">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <p className="text-center font-mono text-xs uppercase tracking-[0.2em] text-ink-500">
-          Why SANS
-        </p>
-
-        <div className="mt-10 grid gap-5 sm:grid-cols-3">
+    <section className="py-16 sm:py-20">
+      <div className="mx-auto max-w-7xl px-5 lg:px-8">
+        <p className="text-center text-sm font-extrabold uppercase tracking-wide text-sea">Neden SANS</p>
+        <div className="mt-8 grid gap-5 sm:grid-cols-3">
           {badges.map((b) => (
-            <div
-              key={b.title}
-              className="flex flex-col items-center gap-3 rounded-xl border border-ink-700 bg-ink-900/60 px-6 py-8 text-center transition-colors hover:border-signal/40"
-            >
-              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-signal/30 bg-signal/10">
-                <b.icon size={20} className="text-signal" />
+            <div key={b.title} className="flex flex-col items-center gap-3 rounded-chunk bg-white px-6 py-8 text-center shadow-pop-sm transition-transform hover:-translate-y-1">
+              <span className={`flex h-14 w-14 items-center justify-center rounded-2xl ${b.color} text-white shadow-pop-sm`}>
+                <b.icon size={24} />
               </span>
-              <h3 className="font-display text-base font-bold text-ink-50">{b.title}</h3>
-              <p className="text-sm text-ink-400">{b.desc}</p>
+              <h3 className="font-display text-lg font-bold text-navy">{b.title}</h3>
+              <p className="text-sm font-semibold text-slate">{b.desc}</p>
             </div>
           ))}
         </div>
@@ -47,9 +29,9 @@ export default function TrustBadges() {
             href={SITE.botUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-md border border-ink-600 px-6 py-3 text-sm font-semibold text-ink-100 transition-colors hover:border-signal/60 hover:text-signal"
+            className="inline-flex items-center gap-2 rounded-2xl bg-sun px-8 py-4 text-base font-extrabold text-[#5a3a00] shadow-sun transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
           >
-            🐺 Play SANS free in Telegram
+            🐺 Telegram&apos;da bedava oyna
           </a>
         </div>
       </div>
