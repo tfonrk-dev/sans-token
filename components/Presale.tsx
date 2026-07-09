@@ -51,15 +51,15 @@ export default function Presale() {
               <Row k="Ön satış payı" v="30%" />
             </dl>
             <a
-              href={SITE.telegram}
+              href={SITE.botUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-sun px-5 py-4 text-base font-extrabold text-[#5a3a00] shadow-sun transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
             >
-              Ön Satışa Katıl <ArrowRight size={18} />
+              Ön Satıştan Al <ArrowRight size={18} />
             </a>
             <p className="mt-3 text-center text-[11px] font-bold text-mute">
-              Zincir üstü alım TON mainnet ile açılır
+              Oyunda cüzdanını bağla → GRAM öde → SANS al
             </p>
           </div>
         </div>
