@@ -9,7 +9,7 @@ export const SITE = {
 
   // Community / socials
   telegram: "https://t.me/sanslicekilisduyuru",
-  twitter: "https://twitter.com/sanslioffical",
+  twitter: "https://twitter.com/sansliofficial",
   instagram: "https://instagram.com/sanslicekilisofficial",
   whitepaper: "/sans-token-whitepaper.pdf",
 
