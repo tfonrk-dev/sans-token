@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fredoka, Nunito } from "next/font/google";
 import "./globals.css";
+import MonetagAds from "@/components/MonetagAds";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -49,6 +50,7 @@ export default function RootLayout({
           }}
         />
         {children}
+        <MonetagAds />
       </body>
     </html>
   );
