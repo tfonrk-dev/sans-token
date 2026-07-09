@@ -20,9 +20,9 @@ export const SITE = {
 
   // Presale terms (no fabricated "raised" numbers — join routes to Telegram)
   presale: {
-    price: "$0.012",
-    listing: "$0.024",
-    minBuy: "10 USDT",
+    price: "$0.0005",
+    listing: "$0.001",
+    minBuy: "5 USDT",
     bonus: "+50%",
   },
 } as const;
