@@ -16,22 +16,23 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "SANS — Feed the Wolf. Earn $SANS on TON.",
+  title: "SANS — Kurdu Besle, TON'da $SANS Kazan",
   description:
-    "A Telegram tap-to-earn game on TON. Feed the wolf, earn $SANS, watch ads for 2× boosts, climb 10 tiers, and connect your TON wallet. Play free in Telegram.",
+    "Telegram'da ücretsiz tap-to-earn oyunu. Kurdu besle, $SANS kazan, reklam izleyip 30 dk 2× kazanç al, 10 seviye atla, TON cüzdanını bağla. Ön satış açık.",
   metadataBase: new URL("https://sanslicekilis.com"),
   openGraph: {
-    title: "SANS — Feed the Wolf. Earn $SANS on TON.",
+    title: "SANS — Kurdu Besle, TON'da $SANS Kazan",
     description:
-      "Telegram tap-to-earn on TON. Feed the wolf, earn $SANS, watch ads for 2× boosts, climb 10 tiers.",
+      "Telegram'da ücretsiz tap-to-earn. Kurdu besle, $SANS kazan, reklam izle 2× kazanç al, 10 seviye atla.",
     url: "https://sanslicekilis.com",
     siteName: "SANS",
+    locale: "tr_TR",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "SANS — Feed the Wolf. Earn $SANS on TON.",
-    description: "Telegram tap-to-earn on TON. Play free, earn $SANS.",
+    title: "SANS — Kurdu Besle, TON'da $SANS Kazan",
+    description: "Telegram'da ücretsiz oyna, TON'da $SANS kazan.",
   },
 };
 
@@ -41,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${fredoka.variable} ${nunito.variable}`}>
+    <html lang="tr" suppressHydrationWarning className={`${fredoka.variable} ${nunito.variable}`}>
       <body className="font-body antialiased">
         <script
           dangerouslySetInnerHTML={{
