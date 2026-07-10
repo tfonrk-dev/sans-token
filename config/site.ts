@@ -11,6 +11,7 @@ export const SITE = {
   telegram: "https://t.me/sanslicekilisduyuru",
   twitter: "https://twitter.com/sansliofficial",
   instagram: "https://instagram.com/sanslicekilisofficial",
+  youtube: "https://www.youtube.com/@SansliCekilisOfficial",
   whitepaper: "/sans-token-whitepaper.pdf",
 
   // Token

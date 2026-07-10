@@ -1,10 +1,11 @@
-import { Send, Twitter, Instagram, Play } from "lucide-react";
+import { Send, Twitter, Instagram, Play, Youtube } from "lucide-react";
 import { SITE } from "@/config/site";
 
 const socials = [
   { href: SITE.telegram, label: "Telegram", icon: Send },
   { href: SITE.twitter, label: "Twitter", icon: Twitter },
   { href: SITE.instagram, label: "Instagram", icon: Instagram },
+  { href: SITE.youtube, label: "YouTube", icon: Youtube },
 ];
 
 export default function Footer() {
