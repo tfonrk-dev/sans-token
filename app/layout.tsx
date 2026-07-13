@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fredoka, Nunito } from "next/font/google";
 import "./globals.css";
 import MonetagAds from "@/components/MonetagAds";
+import { LangProvider } from "@/components/LangProvider";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -50,7 +51,7 @@ export default function RootLayout({
               "(function(){try{var t=localStorage.getItem('sans-theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}})();",
           }}
         />
-        {children}
+        <LangProvider>{children}</LangProvider>
         <MonetagAds />
       </body>
     </html>

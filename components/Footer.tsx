@@ -1,5 +1,7 @@
+"use client";
 import { Send, Twitter, Instagram, Play, Youtube } from "lucide-react";
 import { SITE } from "@/config/site";
+import { useT } from "./LangProvider";
 
 const socials = [
   { href: SITE.telegram, label: "Telegram", icon: Send },
@@ -9,6 +11,7 @@ const socials = [
 ];
 
 export default function Footer() {
+  const t = useT();
   return (
     <footer className="border-t border-sky-200/70 bg-cream">
       <div className="mx-auto max-w-7xl px-5 py-12 lg:px-8">
@@ -18,17 +21,14 @@ export default function Footer() {
               <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-b from-sky-100 to-sky-200 text-lg shadow-pop-sm">🐺</span>
               <span className="font-display text-lg font-bold tracking-wide text-navy">SANS</span>
             </div>
-            <p className="mt-3 max-w-sm text-sm font-semibold text-slate">
-              Kurdu besle, TON&apos;da $SANS kazan. Şeffaflık ve gerçek etkileşim üzerine
-              kurulu bir Telegram tap-to-earn oyunu.
-            </p>
+            <p className="mt-3 max-w-sm text-sm font-semibold text-slate">{t.footer.tagline}</p>
             <a
               href={SITE.botUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-4 inline-flex items-center gap-2 rounded-2xl bg-sun px-4 py-2.5 text-sm font-extrabold text-[#5a3a00] shadow-sun"
             >
-              <Play size={14} /> Oyna
+              <Play size={14} /> {t.footer.play}
             </a>
           </div>
 
@@ -50,13 +50,7 @@ export default function Footer() {
 
         <div className="mt-10 border-t border-sky-100 pt-6">
           <p className="text-xs font-medium leading-relaxed text-mute">
-            <span className="font-bold text-slate">Sorumluluk reddi:</span> SANS, SANS
-            ekosistemi içinde kullanım için bir yardımcı token&apos;dır (oyun ödülleri,
-            reklam etkileşimi ve ekosistem erişimi). Bir menkul kıymet, yatırım
-            sözleşmesi veya finansal araç değildir ve SANS tutmak herhangi bir
-            varlıkta hisse/kâr payı/mülkiyet temsil etmez. Kripto para riski, anaparanın
-            kaybı dahil, içerir. Bu sitedeki hiçbir şey finansal tavsiye değildir —
-            ön satışa katılmadan önce kendi araştırmanı yap.
+            <span className="font-bold text-slate">{t.footer.disclaimerTitle}</span> {t.footer.disclaimer}
           </p>
           <p className="mt-4 text-xs font-bold text-mute">© 2026 SANS · {SITE.domain}</p>
         </div>
