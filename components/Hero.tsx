@@ -29,7 +29,7 @@ export default function Hero() {
 
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row lg:items-start">
             <a
-              href={SITE.botUrl}
+              href={SITE.playUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-2xl bg-sun px-7 py-4 text-base font-extrabold text-[#5a3a00] shadow-sun transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
@@ -37,7 +37,9 @@ export default function Hero() {
               <Play size={18} /> {t.hero.playFree}
             </a>
             <a
-              href="#presale"
+              href={SITE.buyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               className="group inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-sea bg-white px-7 py-4 text-base font-extrabold text-sea shadow-pop-sm transition-transform hover:-translate-y-0.5"
             >
               {t.hero.buy}

@@ -5,6 +5,10 @@ export const SITE = {
 
   // The live product: a Telegram tap-to-earn mini app.
   botUrl: "https://t.me/sanslicekilisbot",
+  // Deep-links that open the Mini App DIRECTLY on the right screen (no bot-chat
+  // stop, no scroll bounce): ?startapp=oyna → game, ?startapp=buy → wallet/presale.
+  playUrl: "https://t.me/sanslicekilisbot?startapp=oyna",
+  buyUrl: "https://t.me/sanslicekilisbot?startapp=buy",
   gameUrl: "https://sans-tap-earn.vercel.app",
 
   // Community / socials

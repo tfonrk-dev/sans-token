@@ -32,7 +32,7 @@ export default function TrustBadges() {
 
         <div className="mt-10 flex justify-center">
           <a
-            href={SITE.botUrl}
+            href={SITE.playUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-2xl bg-sun px-8 py-4 text-base font-extrabold text-[#5a3a00] shadow-sun transition-transform hover:-translate-y-0.5 active:translate-y-0.5"

@@ -50,7 +50,7 @@ export default function Presale() {
               <Row k={t.presale.shareLabel} v="30%" />
             </dl>
             <a
-              href={SITE.botUrl}
+              href={SITE.buyUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-sun px-5 py-4 text-base font-extrabold text-[#5a3a00] shadow-sun transition-transform hover:-translate-y-0.5 active:translate-y-0.5"

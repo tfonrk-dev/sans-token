@@ -40,7 +40,7 @@ export default function Navbar() {
           <LangToggle />
           <ThemeToggle />
           <a
-            href={SITE.botUrl}
+            href={SITE.playUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-2xl bg-sun px-5 py-2.5 text-sm font-extrabold text-[#5a3a00] shadow-sun transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
@@ -72,7 +72,7 @@ export default function Navbar() {
               </a>
             ))}
             <a
-              href={SITE.botUrl}
+              href={SITE.playUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-1 inline-flex items-center justify-center gap-2 rounded-2xl bg-sun px-5 py-3 font-extrabold text-[#5a3a00] shadow-sun"

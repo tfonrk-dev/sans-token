@@ -23,7 +23,7 @@ export default function Footer() {
             </div>
             <p className="mt-3 max-w-sm text-sm font-semibold text-slate">{t.footer.tagline}</p>
             <a
-              href={SITE.botUrl}
+              href={SITE.playUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-4 inline-flex items-center gap-2 rounded-2xl bg-sun px-4 py-2.5 text-sm font-extrabold text-[#5a3a00] shadow-sun"
