@@ -1,0 +1,363 @@
+<!doctype html>
+<!--
+  ============================================================================
+  FREELANCE PORTFOLIO PAGE  ·  served at  sanslicekilis.com/build
+  ----------------------------------------------------------------------------
+  TEK DÜZENLEME NOKTASI: aşağıdaki <script id="cfg"> içindeki CONFIG.
+    name     → sayfada görünecek adın / stüdyo adın
+    telegram → Telegram kullanıcı adın (BAŞINDA @ OLMADAN)
+  Bütün "Hire me" butonları ve ad alanları buradan otomatik dolar.
+  ============================================================================
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Telegram Tap-to-Earn Game Developer · TON</title>
+<meta name="description" content="I build server-authoritative, anti-cheat Telegram tap-to-earn mini apps on TON. Live demo, wallet connect, ads and presale built in. Hire me for your token launch.">
+<meta name="robots" content="index,follow">
+<meta property="og:title" content="Telegram Tap-to-Earn Game Developer · TON">
+<meta property="og:description" content="Server-authoritative, anti-cheat Telegram mini-app games. Live demo you can play right now.">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --bg:#080b12; --bg2:#0b1018; --card:#111826; --card2:#151d2e;
+    --line:rgba(255,255,255,.09); --line2:rgba(255,255,255,.14);
+    --tx:#e8eefb; --mut:#93a1bd; --dim:#63708c;
+    --ton:#0098ea; --ton2:#33b1f2; --vio:#8b5cf6; --grn:#22d39a; --amb:#ffbf3d;
+    --rad:18px; --max:1120px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg); color:var(--tx);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,system-ui,sans-serif;
+    line-height:1.55; -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(60% 40% at 80% -5%, rgba(0,152,234,.18), transparent 60%),
+      radial-gradient(50% 40% at 5% 10%, rgba(139,92,246,.14), transparent 60%);
+    background-attachment:fixed;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 22px}
+  .mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+
+  /* nav */
+  nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+    background:rgba(8,11,18,.72);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:62px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.02em}
+  .brand .dot{width:11px;height:11px;border-radius:50%;background:linear-gradient(135deg,var(--ton),var(--vio));box-shadow:0 0 14px var(--ton)}
+  .navr{display:flex;align-items:center;gap:8px}
+  .lang{border:1px solid var(--line2);background:transparent;color:var(--mut);font:inherit;font-size:12px;font-weight:700;
+    padding:6px 10px;border-radius:999px;cursor:pointer}
+  .lang:hover{color:var(--tx);border-color:var(--ton)}
+
+  /* buttons */
+  .btn{display:inline-flex;align-items:center;gap:9px;font-weight:800;font-size:15px;
+    padding:13px 22px;border-radius:13px;cursor:pointer;border:1px solid transparent;transition:transform .08s,box-shadow .2s;white-space:nowrap}
+  .btn:active{transform:translateY(1px)}
+  .btn-tg{background:linear-gradient(135deg,var(--ton),#0077c8);color:#fff;box-shadow:0 8px 24px rgba(0,152,234,.4)}
+  .btn-tg:hover{box-shadow:0 10px 30px rgba(0,152,234,.6)}
+  .btn-play{background:var(--card2);color:var(--tx);border-color:var(--line2)}
+  .btn-play:hover{border-color:var(--ton)}
+  .btn-sm{padding:9px 15px;font-size:13.5px}
+
+  /* hero */
+  header{padding:64px 0 34px}
+  .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:center}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ton2);background:rgba(0,152,234,.1);border:1px solid rgba(0,152,234,.25);
+    padding:6px 13px;border-radius:999px;margin-bottom:20px}
+  h1{font-size:clamp(30px,5vw,50px);line-height:1.05;letter-spacing:-.03em;font-weight:850}
+  h1 .g{background:linear-gradient(120deg,var(--ton2),var(--vio));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--mut);font-size:clamp(15px,2vw,18px);margin:20px 0 28px;max-width:33em}
+  .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:26px}
+  .chip{font-size:12.5px;font-weight:700;color:var(--mut);border:1px solid var(--line);background:var(--card);
+    padding:7px 12px;border-radius:999px;display:inline-flex;align-items:center;gap:7px}
+  .chip .d{width:7px;height:7px;border-radius:50%;background:var(--grn);box-shadow:0 0 8px var(--grn)}
+
+  .shot{position:relative;justify-self:center}
+  .shot img{width:min(300px,72vw);height:auto;border-radius:26px;display:block;
+    box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px var(--line2);}
+  .shot::before{content:"";position:absolute;inset:-40px;z-index:-1;
+    background:radial-gradient(circle,rgba(0,152,234,.25),transparent 65%);filter:blur(10px)}
+  .shot .float{position:absolute;left:-22px;bottom:38px;background:var(--card);border:1px solid var(--line2);
+    border-radius:14px;padding:10px 13px;box-shadow:0 12px 30px rgba(0,0,0,.5);font-size:12.5px;font-weight:800}
+  .shot .float b{color:var(--grn)}
+
+  /* sections */
+  section{padding:52px 0;border-top:1px solid var(--line)}
+  .kicker{font-size:12.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ton2);margin-bottom:12px}
+  h2{font-size:clamp(23px,3.4vw,33px);letter-spacing:-.025em;font-weight:820;line-height:1.12}
+  .lead{color:var(--mut);font-size:16.5px;margin-top:14px;max-width:44em}
+
+  /* the differentiator — the money section */
+  .diff{background:linear-gradient(135deg,rgba(0,152,234,.09),rgba(139,92,246,.08));
+    border:1px solid var(--line2);border-radius:var(--rad);padding:34px;margin-top:6px}
+  .diff h2 .g{background:linear-gradient(120deg,var(--ton2),var(--vio));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
+  .vs .col{border-radius:14px;padding:20px}
+  .vs .bad{background:rgba(255,80,80,.06);border:1px solid rgba(255,80,80,.22)}
+  .vs .good{background:rgba(34,211,154,.06);border:1px solid rgba(34,211,154,.28)}
+  .vs h3{font-size:15px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .vs .bad h3{color:#ff8080}.vs .good h3{color:var(--grn)}
+  .vs li{list-style:none;font-size:14px;color:var(--mut);padding:6px 0 6px 22px;position:relative}
+  .vs .bad li::before{content:"✕";position:absolute;left:0;color:#ff8080;font-weight:800}
+  .vs .good li::before{content:"✓";position:absolute;left:0;color:var(--grn);font-weight:800}
+
+  /* capabilities grid */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+  .cell{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 18px 16px;transition:border-color .2s,transform .12s}
+  .cell:hover{border-color:var(--line2);transform:translateY(-2px)}
+  .cell .ic{font-size:20px;margin-bottom:9px}
+  .cell h4{font-size:15px;font-weight:800;margin-bottom:4px}
+  .cell p{font-size:13px;color:var(--dim);line-height:1.45}
+
+  /* packages */
+  .pk{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+  .pkc{background:var(--card);border:1px solid var(--line);border-radius:var(--rad);padding:24px;display:flex;flex-direction:column}
+  .pkc.feat{border-color:var(--ton);box-shadow:0 0 0 1px var(--ton),0 20px 50px rgba(0,152,234,.18);position:relative}
+  .pkc.feat::after{content:"MOST POPULAR";position:absolute;top:-11px;left:24px;background:var(--ton);color:#fff;
+    font-size:10px;font-weight:800;letter-spacing:.08em;padding:4px 10px;border-radius:999px}
+  .pkc .pn{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ton2)}
+  .pkc .pt{font-size:20px;font-weight:820;margin:8px 0 4px}
+  .pkc .pd{font-size:13.5px;color:var(--mut);min-height:40px}
+  .pkc .eta{font-size:12.5px;font-weight:700;color:var(--amb);margin:12px 0}
+  .pkc ul{list-style:none;margin:6px 0 18px;flex:1}
+  .pkc li{font-size:13.5px;color:var(--mut);padding:5px 0 5px 20px;position:relative}
+  .pkc li::before{content:"→";position:absolute;left:0;color:var(--ton2);font-weight:800}
+  .note{color:var(--dim);font-size:13.5px;margin-top:16px;text-align:center}
+  .note b{color:var(--grn)}
+
+  /* process */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:28px}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .step .n{font-family:ui-monospace,monospace;font-size:13px;font-weight:800;color:var(--ton2);
+    border:1px solid var(--line2);width:30px;height:30px;border-radius:8px;display:grid;place-items:center;margin-bottom:12px}
+  .step h4{font-size:15px;font-weight:800;margin-bottom:5px}
+  .step p{font-size:13px;color:var(--dim)}
+  .trust{margin-top:18px;display:flex;align-items:center;gap:11px;background:rgba(34,211,154,.06);
+    border:1px solid rgba(34,211,154,.25);border-radius:12px;padding:14px 16px;font-size:13.5px;color:var(--mut)}
+  .trust .s{font-size:18px}
+
+  /* final cta */
+  .final{text-align:center;background:linear-gradient(135deg,rgba(0,152,234,.12),rgba(139,92,246,.1));
+    border:1px solid var(--line2);border-radius:24px;padding:52px 28px;margin:6px 0}
+  .final h2{font-size:clamp(26px,4vw,38px)}
+  .final p{color:var(--mut);font-size:16.5px;margin:14px auto 26px;max-width:32em}
+
+  footer{border-top:1px solid var(--line);padding:30px 0 44px;color:var(--dim);font-size:13px}
+  .foot{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center}
+  .stack{display:flex;gap:8px;flex-wrap:wrap}
+  .stack span{font-size:11.5px;font-weight:700;color:var(--mut);border:1px solid var(--line);padding:4px 9px;border-radius:6px}
+
+  @media(max-width:860px){
+    .hero{grid-template-columns:1fr;gap:34px;text-align:center}
+    .eyebrow{margin-inline:auto}.sub{margin-inline:auto}.cta{justify-content:center}.chips{justify-content:center}
+    .shot{order:-1}
+    .vs,.grid,.pk,.steps{grid-template-columns:1fr}
+    .grid{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:520px){.grid{grid-template-columns:1fr}.nav .btn-play{display:none}}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap nav">
+  <a class="brand" href="#top"><span class="dot"></span><span data-name>Studio</span></a>
+  <div class="navr">
+    <button class="lang" id="langBtn" aria-label="Switch language">TR</button>
+    <a class="btn btn-play btn-sm" href="https://sans-tap-earn.vercel.app" target="_blank" rel="noopener"
+       data-i18n data-en="▶ Live demo" data-tr="▶ Canlı demo">▶ Live demo</a>
+    <a class="btn btn-tg btn-sm tg" href="#" target="_blank" rel="noopener"
+       data-i18n data-en="Hire me" data-tr="İş ver">Hire me</a>
+  </div>
+</div></nav>
+
+<span id="top"></span>
+<header><div class="wrap hero">
+  <div>
+    <span class="eyebrow" data-i18n data-en="Telegram Mini-App Game Studio · TON" data-tr="Telegram Mini-App Oyun Stüdyosu · TON">Telegram Mini-App Game Studio · TON</span>
+    <h1 data-i18n data-en-html="I build Telegram tap-to-earn games players <span class='g'>can't cheat.</span>"
+        data-tr-html="Oyuncuların <span class='g'>hile yapamadığı</span> Telegram tap-to-earn oyunları yapıyorum.">
+      I build Telegram tap-to-earn games players <span class="g">can't cheat.</span></h1>
+    <p class="sub" data-i18n
+       data-en="Server-authoritative, TON-native, and live in production. Same genre as Hamster Kombat & Notcoin — built custom for your token launch."
+       data-tr="Sunucu-otoriter, TON-native ve canlı yayında. Hamster Kombat & Notcoin ile aynı tür — token lansmanınız için sıfırdan uyarlanır.">
+       Server-authoritative, TON-native, and live in production. Same genre as Hamster Kombat & Notcoin — built custom for your token launch.</p>
+    <div class="cta">
+      <a class="btn btn-tg tg" href="#" target="_blank" rel="noopener"
+         data-i18n data-en="Hire me on Telegram" data-tr="Telegram'dan iş ver">Hire me on Telegram</a>
+      <a class="btn btn-play" href="https://sans-tap-earn.vercel.app" target="_blank" rel="noopener"
+         data-i18n data-en="▶ Play the live demo" data-tr="▶ Canlı demoyu oyna">▶ Play the live demo</a>
+    </div>
+    <div class="chips">
+      <span class="chip"><span class="d"></span><span data-i18n data-en="Live on TON mainnet" data-tr="TON mainnet'te canlı">Live on TON mainnet</span></span>
+      <span class="chip"><span class="d"></span><span data-i18n data-en="Anti-cheat backend" data-tr="Hile korumalı backend">Anti-cheat backend</span></span>
+      <span class="chip"><span class="d"></span><span data-i18n data-en="4 languages" data-tr="4 dil">4 languages</span></span>
+      <span class="chip"><span class="d"></span><span data-i18n data-en="Ads + wallet built in" data-tr="Reklam + cüzdan hazır">Ads + wallet built in</span></span>
+    </div>
+  </div>
+  <div class="shot">
+    <img src="/build-shot.png" alt="Live Telegram tap-to-earn game screenshot" loading="eager">
+    <div class="float" data-i18n data-en-html="<b>●</b> Live &amp; playable" data-tr-html="<b>●</b> Canlı &amp; oynanıyor"><b>●</b> Live &amp; playable</div>
+  </div>
+</div></header>
+
+<section><div class="wrap">
+  <div class="diff">
+    <div class="kicker" data-i18n data-en="Why me" data-tr="Neden ben">Why me</div>
+    <h2 data-i18n data-en-html="Most clones can be hacked in <span class='g'>10 seconds.</span> Mine can't."
+        data-tr-html="Çoğu klon <span class='g'>10 saniyede</span> hacklenir. Benimki hacklenmez.">
+        Most clones can be hacked in <span class="g">10 seconds.</span> Mine can't.</h2>
+    <p class="lead" data-i18n
+       data-en="Cheap tap-game clones keep the balance in the browser (localStorage). Any player opens the console and sets their balance to a billion — your airdrop is worthless before launch. I compute every balance, energy and reward on the server. The client is never trusted."
+       data-tr="Ucuz tap-oyun klonları bakiyeyi tarayıcıda (localStorage) tutar. Oyuncu konsolu açıp bakiyesini milyara çeker — airdrop'unuz daha lansmandan önce değersiz olur. Ben her bakiyeyi, enerjiyi ve ödülü sunucuda hesaplarım. İstemciye asla güvenilmez.">
+       Cheap tap-game clones keep the balance in the browser (localStorage). Any player opens the console and sets their balance to a billion — your airdrop is worthless before launch. I compute every balance, energy and reward on the server. The client is never trusted.</p>
+    <div class="vs">
+      <div class="col bad">
+        <h3 data-i18n data-en="Typical $50 clone" data-tr="Tipik $50 klon">Typical $50 clone</h3>
+        <ul>
+          <li data-i18n data-en="Balance stored in the browser" data-tr="Bakiye tarayıcıda saklanır">Balance stored in the browser</li>
+          <li data-i18n data-en="Editable in 10 seconds" data-tr="10 saniyede editlenir">Editable in 10 seconds</li>
+          <li data-i18n data-en="Fake taps flood the leaderboard" data-tr="Sahte tıklamalar lider tablosunu doldurur">Fake taps flood the leaderboard</li>
+          <li data-i18n data-en="Airdrop numbers can't be trusted" data-tr="Airdrop rakamlarına güvenilmez">Airdrop numbers can't be trusted</li>
+        </ul>
+      </div>
+      <div class="col good">
+        <h3 data-i18n data-en="What I deliver" data-tr="Benim teslim ettiğim">What I deliver</h3>
+        <ul>
+          <li data-i18n data-en="Server-authoritative game state" data-tr="Sunucu-otoriter oyun durumu">Server-authoritative game state</li>
+          <li data-i18n data-en="Tap-rate & timestamp validation" data-tr="Tıklama hızı & zaman doğrulaması">Tap-rate & timestamp validation</li>
+          <li data-i18n data-en="Ad rewards verified by postback" data-tr="Reklam ödülleri postback ile doğrulanır">Ad rewards verified by postback</li>
+          <li data-i18n data-en="Real, defensible airdrop data" data-tr="Gerçek, savunulabilir airdrop verisi">Real, defensible airdrop data</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="kicker" data-i18n data-en="What's included" data-tr="Neler dahil">What's included</div>
+  <h2 data-i18n data-en="A full retention engine — not just a tap button" data-tr="Sadece tıklama butonu değil — tam bir tutundurma motoru">A full retention engine — not just a tap button</h2>
+  <div class="grid">
+    <div class="cell"><div class="ic">👆</div><h4 data-i18n data-en="Tap & earn core" data-tr="Tap & kazan çekirdeği">Tap & earn core</h4><p data-i18n data-en="Optimistic UI, instant feel, server-reconciled." data-tr="Optimistik arayüz, anlık his, sunucu ile uzlaşır.">Optimistic UI, instant feel, server-reconciled.</p></div>
+    <div class="cell"><div class="ic">⚡</div><h4 data-i18n data-en="Energy & upgrades" data-tr="Enerji & yükseltmeler">Energy & upgrades</h4><p data-i18n data-en="Multi-tap, capacity, refill speed, passive income." data-tr="Çoklu-tık, kapasite, dolum hızı, pasif gelir.">Multi-tap, capacity, refill speed, passive income.</p></div>
+    <div class="cell"><div class="ic">🏆</div><h4 data-i18n data-en="10 leagues" data-tr="10 lig">10 leagues</h4><p data-i18n data-en="Ranked ladders that reset and drive competition." data-tr="Sıfırlanan, rekabeti tetikleyen sıralama ligleri.">Ranked ladders that reset and drive competition.</p></div>
+    <div class="cell"><div class="ic">🔥</div><h4 data-i18n data-en="Daily streak & combo" data-tr="Günlük seri & kombo">Daily streak & combo</h4><p data-i18n data-en="Habitual daily-open loops with escalating rewards." data-tr="Artan ödüllerle her gün açtıran alışkanlık döngüsü.">Habitual daily-open loops with escalating rewards.</p></div>
+    <div class="cell"><div class="ic">🤝</div><h4 data-i18n data-en="Tasks & referrals" data-tr="Görevler & davetler">Tasks & referrals</h4><p data-i18n data-en="Follow / join quests + viral invite rewards." data-tr="Takip/katıl görevleri + viral davet ödülleri.">Follow / join quests + viral invite rewards.</p></div>
+    <div class="cell"><div class="ic">💎</div><h4 data-i18n data-en="TON wallet + presale" data-tr="TON cüzdan + presale">TON wallet + presale</h4><p data-i18n data-en="Wallet connect, on-chain payments, presale flow." data-tr="Cüzdan bağlama, on-chain ödeme, presale akışı.">Wallet connect, on-chain payments, presale flow.</p></div>
+    <div class="cell"><div class="ic">📺</div><h4 data-i18n data-en="Ad revenue" data-tr="Reklam geliri">Ad revenue</h4><p data-i18n data-en="Rewarded + interstitial ads, server-verified." data-tr="Ödüllü + geçiş reklamları, sunucu doğrulamalı.">Rewarded + interstitial ads, server-verified.</p></div>
+    <div class="cell"><div class="ic">🌍</div><h4 data-i18n data-en="Multi-language" data-tr="Çoklu dil">Multi-language</h4><p data-i18n data-en="Auto-detected, type-checked, easy to extend." data-tr="Otomatik algılanan, tip-denetimli, kolay genişler.">Auto-detected, type-checked, easy to extend.</p></div>
+    <div class="cell"><div class="ic">🛠️</div><h4 data-i18n data-en="Admin & bot" data-tr="Admin & bot">Admin & bot</h4><p data-i18n data-en="Push notifications, event tools, moderation." data-tr="Push bildirim, etkinlik araçları, moderasyon.">Push notifications, event tools, moderation.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="kicker" data-i18n data-en="Packages" data-tr="Paketler">Packages</div>
+  <h2 data-i18n data-en="Pick a starting point" data-tr="Bir başlangıç noktası seç">Pick a starting point</h2>
+  <div class="pk">
+    <div class="pkc">
+      <div class="pn" data-i18n data-en="Fastest" data-tr="En hızlı">Fastest</div>
+      <div class="pt" data-i18n data-en="Reskin" data-tr="Reskin">Reskin</div>
+      <div class="pd" data-i18n data-en="My proven engine, rebranded for your token." data-tr="Kanıtlanmış motorum, tokenınız için yeniden markalanır.">My proven engine, rebranded for your token.</div>
+      <div class="eta" data-i18n data-en="⏱ 3–5 days" data-tr="⏱ 3–5 gün">⏱ 3–5 days</div>
+      <ul>
+        <li data-i18n data-en="Your character, name, colors" data-tr="Karakteriniz, isim, renkler">Your character, name, colors</li>
+        <li data-i18n data-en="Your token & links" data-tr="Tokenınız & linkler">Your token & links</li>
+        <li data-i18n data-en="Deployed & live" data-tr="Deploy edilmiş & canlı">Deployed & live</li>
+      </ul>
+      <a class="btn btn-play tg" href="#" target="_blank" rel="noopener" data-i18n data-en="Get a quote" data-tr="Teklif al">Get a quote</a>
+    </div>
+    <div class="pkc feat">
+      <div class="pn" data-i18n data-en="Best value" data-tr="En iyi değer">Best value</div>
+      <div class="pt" data-i18n data-en="Custom Game" data-tr="Özel Oyun">Custom Game</div>
+      <div class="pd" data-i18n data-en="Reskin plus mechanics tailored to your project." data-tr="Reskin + projenize özel mekanikler.">Reskin plus mechanics tailored to your project.</div>
+      <div class="eta" data-i18n data-en="⏱ 1–2 weeks" data-tr="⏱ 1–2 hafta">⏱ 1–2 weeks</div>
+      <ul>
+        <li data-i18n data-en="Custom tasks & referrals" data-tr="Özel görevler & davetler">Custom tasks & referrals</li>
+        <li data-i18n data-en="Your chain & wallet" data-tr="Zinciriniz & cüzdan">Your chain & wallet</li>
+        <li data-i18n data-en="Leaderboards & ads" data-tr="Lider tabloları & reklam">Leaderboards & ads</li>
+      </ul>
+      <a class="btn btn-tg tg" href="#" target="_blank" rel="noopener" data-i18n data-en="Get a quote" data-tr="Teklif al">Get a quote</a>
+    </div>
+    <div class="pkc">
+      <div class="pn" data-i18n data-en="Everything" data-tr="Her şey">Everything</div>
+      <div class="pt" data-i18n data-en="Full Launch" data-tr="Tam Lansman">Full Launch</div>
+      <div class="pd" data-i18n data-en="Custom mechanics, admin panel, launch support." data-tr="Özel mekanik, admin panel, lansman desteği.">Custom mechanics, admin panel, launch support.</div>
+      <div class="eta" data-i18n data-en="⏱ 2–4 weeks" data-tr="⏱ 2–4 hafta">⏱ 2–4 weeks</div>
+      <ul>
+        <li data-i18n data-en="Bespoke game mechanics" data-tr="Size özel oyun mekaniği">Bespoke game mechanics</li>
+        <li data-i18n data-en="Admin & analytics tools" data-tr="Admin & analiz araçları">Admin & analytics tools</li>
+        <li data-i18n data-en="Token contract (optional)" data-tr="Token kontratı (opsiyonel)">Token contract (optional)</li>
+      </ul>
+      <a class="btn btn-play tg" href="#" target="_blank" rel="noopener" data-i18n data-en="Get a quote" data-tr="Teklif al">Get a quote</a>
+    </div>
+  </div>
+  <p class="note" data-i18n data-en-html="Every build can add <b>monthly maintenance</b> — hosting, new seasons, events & support." data-tr-html="Her projeye <b>aylık bakım</b> eklenebilir — hosting, yeni sezonlar, etkinlikler & destek.">Every build can add <b>monthly maintenance</b> — hosting, new seasons, events & support.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="kicker" data-i18n data-en="How it works" data-tr="Nasıl işler">How it works</div>
+  <h2 data-i18n data-en="From chat to launch" data-tr="Sohbetten lansmana">From chat to launch</h2>
+  <div class="steps">
+    <div class="step"><div class="n">01</div><h4 data-i18n data-en="Message me" data-tr="Yaz bana">Message me</h4><p data-i18n data-en="Tell me your token, chain and timeline." data-tr="Token, zincir ve zaman planını anlat.">Tell me your token, chain and timeline.</p></div>
+    <div class="step"><div class="n">02</div><h4 data-i18n data-en="Scope & quote" data-tr="Kapsam & teklif">Scope & quote</h4><p data-i18n data-en="Fixed scope, fixed price, clear delivery date." data-tr="Net kapsam, net fiyat, net teslim tarihi.">Fixed scope, fixed price, clear delivery date.</p></div>
+    <div class="step"><div class="n">03</div><h4 data-i18n data-en="I build" data-tr="Ben yaparım">I build</h4><p data-i18n data-en="You get a live preview link as it comes together." data-tr="İlerledikçe canlı önizleme linki alırsın.">You get a live preview link as it comes together.</p></div>
+    <div class="step"><div class="n">04</div><h4 data-i18n data-en="Launch" data-tr="Lansman">Launch</h4><p data-i18n data-en="Deployed to your bot, handed over, supported." data-tr="Botunuza deploy, teslim, destek.">Deployed to your bot, handed over, supported.</p></div>
+  </div>
+  <div class="trust"><span class="s">🔒</span><span data-i18n data-en-html="Payment is milestone-based (typically 50% up front). Source & deploy handed over on final payment — safe for both sides. Escrow via Fiverr/Upwork available." data-tr-html="Ödeme aşamalı (genelde %50 peşin). Kaynak & deploy final ödemede teslim edilir — iki taraf için de güvenli. Fiverr/Upwork escrow mümkün.">Payment is milestone-based (typically 50% up front). Source & deploy handed over on final payment — safe for both sides. Escrow via Fiverr/Upwork available.</span></div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="final">
+    <h2 data-i18n data-en="Launching a token? Give it a game people open every day." data-tr="Token mı çıkarıyorsun? Ona her gün açılan bir oyun ver.">Launching a token? Give it a game people open every day.</h2>
+    <p data-i18n data-en="I already built one end-to-end — game, TON token, smart contract and site. Let's build yours." data-tr="Birini uçtan uca zaten yaptım — oyun, TON token, akıllı kontrat ve site. Seninkini de yapalım.">I already built one end-to-end — game, TON token, smart contract and site. Let's build yours.</p>
+    <a class="btn btn-tg tg" href="#" target="_blank" rel="noopener" style="font-size:16px;padding:15px 28px"
+       data-i18n data-en="Message me on Telegram →" data-tr="Telegram'dan yaz →">Message me on Telegram →</a>
+  </div>
+</div></section>
+
+<footer><div class="wrap foot">
+  <div>© <span id="yr"></span> <span data-name>Studio</span> · <span data-i18n data-en="Built SANS — live on TON" data-tr="SANS'ı yaptım — TON'da canlı">Built SANS — live on TON</span></div>
+  <div class="stack"><span>Next.js</span><span>TypeScript</span><span>TON</span><span>Node</span><span>Postgres</span></div>
+</div></footer>
+
+<script id="cfg">
+  /* ====== TEK DÜZENLENECEK YER ====== */
+  const CONFIG = {
+    name: "WolfDev",             // ← sayfada görünecek adın / stüdyo adın
+    telegram: "wolfdevGames",    // ← Telegram kullanıcı adın (BAŞINDA @ YOK)
+  };
+  /* ================================== */
+</script>
+<script>
+  (function(){
+    // fill name + telegram everywhere
+    document.querySelectorAll("[data-name]").forEach(function(el){ el.textContent = CONFIG.name; });
+    var tgUrl = "https://t.me/" + CONFIG.telegram;
+    document.querySelectorAll("a.tg").forEach(function(a){ a.setAttribute("href", tgUrl); });
+    document.getElementById("yr").textContent = new Date().getFullYear();
+
+    // language toggle (EN default, TR available; persisted)
+    var lang = localStorage.getItem("build-lang") || "en";
+    var btn = document.getElementById("langBtn");
+    function apply(l){
+      document.documentElement.lang = l;
+      document.querySelectorAll("[data-i18n]").forEach(function(el){
+        var html = el.getAttribute("data-"+l+"-html");
+        if(html !== null){ el.innerHTML = html; return; }
+        var txt = el.getAttribute("data-"+l);
+        if(txt !== null) el.textContent = txt;
+      });
+      btn.textContent = (l === "en") ? "TR" : "EN";
+      localStorage.setItem("build-lang", l);
+    }
+    btn.addEventListener("click", function(){ lang = (lang === "en") ? "tr" : "en"; apply(lang); });
+    apply(lang);
+  })();
+</script>
+</body>
+</html>

@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Clean URL for the freelance portfolio: /build serves the static public/build.html
+  async rewrites() {
+    return [{ source: "/build", destination: "/build.html" }];
+  },
   webpack: (config) => {
     config.externals.push(
       "@walletconnect/ethereum-provider",
