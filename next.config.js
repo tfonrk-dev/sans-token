@@ -3,7 +3,10 @@ const nextConfig = {
   reactStrictMode: true,
   // Clean URL for the freelance portfolio: /build serves the static public/build.html
   async rewrites() {
-    return [{ source: "/build", destination: "/build.html" }];
+    return [
+      { source: "/build", destination: "/build.html" },
+      { source: "/pet", destination: "/pet.html" },
+    ];
   },
   webpack: (config) => {
     config.externals.push(
