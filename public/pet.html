@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Adoption Pet 🐾</title>
 <style>
   :root{
@@ -13,14 +13,18 @@
     --bg1:#ffe6f3; --bg2:#e9e2ff; --bg3:#dff3ff;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  html,body{height:100%}
+  html{height:100%}
   body{
+    height:100%; overflow:hidden;
     font-family:"Baloo 2",Fredoka,"Segoe UI Rounded","Comic Sans MS",system-ui,sans-serif;
-    color:var(--ink); overflow:hidden;
+    color:var(--ink);
     background:linear-gradient(160deg,var(--bg1),var(--bg2) 55%,var(--bg3));
     user-select:none; -webkit-user-select:none;
   }
-  #app{max-width:520px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;position:relative}
+  /* svh = stable "small viewport height": unlike dvh it does NOT change when the
+     mobile address bar shows/hides, so the game NEVER grows or shrinks. Only
+     .screen scrolls inside. (100vh is the fallback for old browsers.) */
+  #app{max-width:520px;margin:0 auto;height:100vh;height:100svh;display:flex;flex-direction:column;position:relative}
 
   .top{display:flex;align-items:center;gap:8px;padding:12px 14px 8px}
   .me{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:999px;padding:5px 12px 5px 6px;
@@ -55,26 +59,37 @@
     border:none;font-size:24px;cursor:pointer;display:grid;place-items:center}
   .envbtn:active{transform:translateY(3px)}
   .envbtn.on{outline:4px solid var(--accent);outline-offset:-2px}
-  .scene{position:relative;height:300px;border-radius:26px;overflow:hidden;box-shadow:0 6px 0 var(--line);cursor:pointer}
+  /* responsive height so the World fits any phone without reflowing */
+  .scene{position:relative;height:clamp(200px,40vh,300px);border-radius:26px;overflow:hidden;box-shadow:0 6px 0 var(--line);cursor:pointer}
   .scene .ground{position:absolute;left:0;right:0;bottom:0;height:64px}
   .decor{position:absolute;pointer-events:none;line-height:1}
   .owner{position:absolute;bottom:60px;left:10%;font-size:52px;line-height:1;animation:wave 2.6s ease-in-out infinite;
     transform-origin:bottom center;pointer-events:none;filter:drop-shadow(0 8px 6px rgba(0,0,0,.18));z-index:4}
   @keyframes wave{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
-  .actor{position:absolute;font-size:84px;line-height:1;z-index:6;transition:left .9s ease,top .9s ease;
-    filter:drop-shadow(0 10px 8px rgba(0,0,0,.22));will-change:left,top}
-  .actor .body{display:inline-block;animation:bob 1.6s ease-in-out infinite}
-  .actor .acc{position:absolute;line-height:1;pointer-events:none}
-  .actor .acc.hat{top:-30px;left:50%;transform:translateX(-50%);font-size:38px}
-  .actor .acc.face{top:20px;left:50%;transform:translateX(-50%);font-size:30px}
-  .actor .acc.neck{bottom:-6px;left:50%;transform:translateX(-50%);font-size:28px}
+  .actor{position:absolute;line-height:1;z-index:6;transition:left .9s ease,top .9s ease;
+    transform:translate(-50%,-100%);filter:drop-shadow(0 10px 8px rgba(0,0,0,.22));will-change:left,top;cursor:pointer}
+  .actor.cuddle{animation:cuddle .5s ease}
+  @keyframes cuddle{0%,100%{transform:translate(-50%,-100%)}30%{transform:translate(-50%,-116%) scale(1.14)}60%{transform:translate(-50%,-100%) scale(1.02)}}
+  .flip{position:relative;display:inline-block;transition:transform .2s}
+  .flip .body{display:inline-block;font-size:84px;animation:bob 1.6s ease-in-out infinite}
+  .flip .acc{position:absolute;line-height:1;pointer-events:none}
+  .flip .acc.hat{top:-30px;left:50%;transform:translateX(-50%);font-size:38px}
+  .flip .acc.face{top:20px;left:50%;transform:translateX(-50%);font-size:30px}
+  .flip .acc.neck{bottom:-6px;left:50%;transform:translateX(-50%);font-size:28px}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-  .scene.air .actor .body{animation:floaty 2.6s ease-in-out infinite}
+  .scene.air .flip .body{animation:floaty 2.6s ease-in-out infinite}
   @keyframes floaty{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-22px) rotate(3deg)}}
-  .scene.sea .actor .body{animation:sway 2.2s ease-in-out infinite}
+  .scene.sea .flip .body{animation:sway 2.2s ease-in-out infinite}
   @keyframes sway{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-6px) rotate(6deg)}}
+  /* thought bubble showing what the animal needs (teaches the child what to do) */
+  .needbubble{position:absolute;top:-30px;left:50%;transform:translateX(-50%);font-size:22px;background:#fff;
+    border-radius:14px;padding:2px 9px;box-shadow:0 4px 10px rgba(0,0,0,.16);z-index:8;animation:bubblePop .3s ease}
+  .needbubble:empty{display:none}
+  .needbubble::after{content:"";position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);
+    border:6px solid transparent;border-top-color:#fff;border-bottom:0}
+  @keyframes bubblePop{0%{transform:translateX(-50%) scale(.4)}100%{transform:translateX(-50%) scale(1)}}
   .tapme{position:absolute;top:8px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.85);
-    color:var(--soft);font-weight:800;font-size:12px;padding:5px 12px;border-radius:999px;pointer-events:none;z-index:7}
+    color:var(--soft);font-weight:800;font-size:12px;padding:5px 12px;border-radius:999px;pointer-events:none;z-index:7;white-space:nowrap}
 
   .env-home{background:linear-gradient(180deg,#ffe9c7,#ffd9e6)}
   .env-home .ground{background:linear-gradient(180deg,#e8b98a,#d89a6a)}
@@ -85,7 +100,8 @@
   .env-air{background:linear-gradient(180deg,#cfe9ff,#f0d9ff)}
   .env-air .ground{background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,.1))}
 
-  .petname{text-align:center;font-size:22px;font-weight:900;margin-top:10px}
+  .petname{text-align:center;font-size:22px;font-weight:900;margin-top:10px;cursor:pointer}
+  .petname .pen{font-size:15px;opacity:.5}
   .mood{text-align:center;font-size:15px;font-weight:800;color:var(--soft);margin-bottom:8px}
   .plate{background:var(--card);border-radius:26px;padding:14px;box-shadow:0 6px 0 var(--line);margin-bottom:12px}
 
@@ -174,6 +190,11 @@
     font-weight:800;font-size:14px;padding:10px 18px;border-radius:999px;z-index:50;opacity:0;transition:opacity .25s;white-space:nowrap;max-width:90%}
   .toast.show{opacity:.96}
 
+  /* rename modal (kids love naming their pet) */
+  .modal{position:absolute;inset:0;background:rgba(40,20,50,.45);display:grid;place-items:center;z-index:60;padding:20px}
+  .sheet{background:var(--card);border-radius:24px;padding:22px;width:min(320px,90%);text-align:center;
+    box-shadow:0 12px 34px rgba(0,0,0,.3);display:flex;flex-direction:column;gap:14px}
+
   .hidden{display:none!important}
   .rowbtns{display:flex;gap:10px;margin-top:8px}
   .rowbtns .btn{flex:1;font-size:16px;padding:14px}
@@ -207,9 +228,9 @@
   /* ================= AUDIO (original, royalty-free, K-pop energy) ================= */
   const Audio2 = (function(){
     let ac=null, master=null, musicGain=null, sfxGain=null, running=false, stepTimer=null, step=0, noiseBuf=null;
-    const BPM=124, stepMs=60000/BPM/4; // 16th notes
+    const BPM=124, stepMs=60000/BPM/4;
     const mtof=(m)=>440*Math.pow(2,(m-69)/12);
-    const PROG=[[60,64,67],[55,59,62],[57,60,64],[53,57,60]]; // C G Am F
+    const PROG=[[60,64,67],[55,59,62],[57,60,64],[53,57,60]];
     const GATE=[1,0,1,1, 0,1,1,0, 1,0,1,1, 0,1,0,1];
     function ensure(){
       if(ac) return true;
@@ -267,6 +288,7 @@
       adopt(){ [60,64,67,72,76].forEach((n,i)=>tone(mtof(n),0.18,"square",0.4,sfxGain,i*0.06)); },
       show(){ [60,67,72,76,79].forEach((n,i)=>tone(mtof(n),0.3,"sawtooth",0.35,sfxGain,i*0.05)); noise(0.5,3000,0.25); },
       gift(){ [79,84,88].forEach((n,i)=>tone(mtof(n),0.14,"triangle",0.45,sfxGain,i*0.06)); },
+      yay(){ [72,76,79,84,88].forEach((n,i)=>tone(mtof(n),0.22,"triangle",0.4,sfxGain,i*0.06)); noise(0.4,4000,0.2); },
       pop(){ tone(mtof(74),0.07,"square",0.35,sfxGain); }
     };
     return { ensure, startMusic, stopMusic, setMuted, sfx:(k)=>{ if(ensure() && SFX[k]) SFX[k](); } };
@@ -280,7 +302,8 @@
       feed:"Feed", play:"Play", bath:"Bath", love:"Love",
       hunger:"Hungry", happy:"Happy", clean:"Clean",
       full:"All full! 🥰", yum:"Yum!", fun:"So fun!", sparkly:"Splash!", love_you:"I love you!",
-      tap_move:"Tap to walk around!", env_home:"Home", env_nature:"Nature", env_sea:"Sea", env_air:"Sky",
+      cuddle:"Hehe! 💖", so_happy:"So happy!",
+      tap_move:"Tap to walk • tap me for a cuddle 💖", env_home:"Home", env_nature:"Nature", env_sea:"Sea", env_air:"Sky",
       my_pets:"My Animals", tap_care:"Tap an animal to become it", active:"You",
       adopt_center:"Adoption Center", adopt_this:"Adopt", adopted:"Welcome home! 🏡",
       need_coins:"You need more coins 🪙",
@@ -289,6 +312,7 @@
       fashion:"Pop Star Show", enter_show:"Go on stage! 🌟",
       you:"You", winner:"Winner!", you_won:"You won", coins_word:"coins", again:"Again",
       gifts_t:"Send a Gift 🎁", pick_friend:"Pick a friend", pick_gift:"Pick a gift", send:"Send 🎁", sent:"Thank you! 💖",
+      rename_q:"Name your animal!", ok:"OK!",
     },
     tr:{ pickLang:"Dil seç", name_q:"Adın ne?", type_here:"Adını yaz…",
       pick_you:"Kendini seç!", pick_color:"Rengini seç", pick_first:"Hangi hayvansın? 🐾",
@@ -296,7 +320,8 @@
       feed:"Besle", play:"Oyna", bath:"Banyo", love:"Sev",
       hunger:"Aç", happy:"Mutlu", clean:"Temiz",
       full:"Hepsi dolu! 🥰", yum:"Mmm!", fun:"Çok eğlenceli!", sparkly:"Şıpır!", love_you:"Seni seviyorum!",
-      tap_move:"Yürümek için dokun!", env_home:"Ev", env_nature:"Doğa", env_sea:"Deniz", env_air:"Gökyüzü",
+      cuddle:"Hihi! 💖", so_happy:"Çok mutlu!",
+      tap_move:"Yürü: dokun • Sev: bana dokun 💖", env_home:"Ev", env_nature:"Doğa", env_sea:"Deniz", env_air:"Gökyüzü",
       my_pets:"Hayvanlarım", tap_care:"Olmak için bir hayvana dokun", active:"Sen",
       adopt_center:"Sahiplenme Evi", adopt_this:"Sahiplen", adopted:"Eve hoş geldin! 🏡",
       need_coins:"Daha çok altın lazım 🪙",
@@ -305,6 +330,7 @@
       fashion:"Pop Yıldızı Şovu", enter_show:"Sahneye çık! 🌟",
       you:"Sen", winner:"Kazanan!", you_won:"Kazandın", coins_word:"altın", again:"Tekrar",
       gifts_t:"Hediye Gönder 🎁", pick_friend:"Bir arkadaş seç", pick_gift:"Bir hediye seç", send:"Gönder 🎁", sent:"Teşekkürler! 💖",
+      rename_q:"Hayvanına ad ver!", ok:"Tamam!",
     }
   };
   const T = (k)=> (DICT[S.lang] && DICT[S.lang][k]) || DICT.en[k] || k;
@@ -359,6 +385,8 @@
     const d=document.createElement("div"); d.className="float"; d.textContent=emoji;
     d.style.left=(r.left-a.left+r.width/2-17+(Math.random()*30-15))+"px"; d.style.top=(r.top-a.top+r.height/2-40)+"px";
     app.appendChild(d); setTimeout(()=>d.remove(),1000); }
+  function bounceActor(){ const a=$("#petActor"); if(a){ a.classList.remove("cuddle"); void a.offsetWidth; a.classList.add("cuddle"); } }
+  function burst(){ const el=$("#petActor")||screen; ["✨","🌟","💖","🎉","⭐"].forEach((e,i)=>setTimeout(()=>floatAt(el,e),i*70)); }
 
   function syncTop(){ const c=$("#coins"); if(c)c.textContent=S.coins; const tr=$("#trophies"); if(tr)tr.textContent=S.trophies;
     const mn=$("#meName"); if(mn)mn.textContent=S.name||"…"; const mv=$("#meAv"); if(mv)mv.textContent=S.avatar;
@@ -401,10 +429,15 @@
   function moodOf(p){ const a=(p.hunger+p.happy+p.clean)/3;
     if(a>=75)return{f:"😍",t:T("love_you")}; if(a>=50)return{f:"🙂",t:T("happy")};
     if(a>=28)return{f:"😟",t:"…"}; return{f:"😢",t:"…"}; }
+  function needEmoji(p){ if(p.hunger<40)return "🍖"; if(p.clean<40)return "🫧"; if(p.happy<40)return "🎾";
+    if(p.hunger>=90&&p.happy>=90&&p.clean>=90)return "💖"; return ""; }
   function actorHTML(p){ const o=p.outfit;
-    return `<div class="actor" id="petActor" style="left:${petPos.x}%;top:${petPos.y}%;transform:translate(-50%,-100%) scaleX(${petFlip?-1:1})">
-      <span class="body">${p.sp}</span>
-      ${o.hat?`<span class="acc hat">${o.hat}</span>`:""}${o.face?`<span class="acc face">${o.face}</span>`:""}${o.neck?`<span class="acc neck">${o.neck}</span>`:""}
+    return `<div class="actor" id="petActor" style="left:${petPos.x}%;top:${petPos.y}%">
+      <span class="needbubble" id="needBubble">${needEmoji(p)}</span>
+      <span class="flip" id="petFlip" style="transform:scaleX(${petFlip?-1:1})">
+        <span class="body">${p.sp}</span>
+        ${o.hat?`<span class="acc hat">${o.hat}</span>`:""}${o.face?`<span class="acc face">${o.face}</span>`:""}${o.neck?`<span class="acc neck">${o.neck}</span>`:""}
+      </span>
     </div>`; }
   function renderHome(){
     const p=activePet(); if(!p){ S.screen="adopt"; return renderAdopt(); }
@@ -418,7 +451,7 @@
         <div class="owner">${S.avatar}</div>
         ${actorHTML(p)}
       </div>
-      <div class="petname">${p.name}</div>
+      <div class="petname" data-a="rename">${p.name} <span class="pen">✏️</span></div>
       <div class="mood" id="moodLine">${moodOf(p).f} ${moodOf(p).t}</div>
       <div class="stats">
         <div class="stat"><span class="ic">🍖</span><span style="width:54px">${T("hunger")}</span><span class="bar h"><i id="barH" style="width:${p.hunger}%"></i></span></div>
@@ -433,20 +466,27 @@
       </div>`;
     const scene=$("#scene");
     scene.addEventListener("click",(e)=>{
+      if(e.target.closest("#petActor")){ cuddle(); return; } // tap the animal → cuddle
       const r=scene.getBoundingClientRect();
       let x=((e.clientX-r.left)/r.width)*100, y=((e.clientY-r.top)/r.height)*100;
       x=Math.max(12,Math.min(88,x)); y=Math.max(28,Math.min(92,y));
       petFlip = x < petPos.x; petPos={x,y};
       const aEl=$("#petActor"); aEl.style.left=x+"%"; aEl.style.top=y+"%";
-      aEl.style.transform=`translate(-50%,-100%) scaleX(${petFlip?-1:1})`;
+      const fl=$("#petFlip"); if(fl) fl.style.transform=`scaleX(${petFlip?-1:1})`;
       Audio2.sfx("pop");
     });
     setActiveScreen("home");
   }
   function updateWorldStats(){ const p=activePet(); if(!p)return;
-    const bH=$("#barH"),bJ=$("#barJ"),bC=$("#barC"),ml=$("#moodLine");
+    const bH=$("#barH"),bJ=$("#barJ"),bC=$("#barC"),ml=$("#moodLine"),nb=$("#needBubble");
     if(bH)bH.style.width=p.hunger+"%"; if(bJ)bJ.style.width=p.happy+"%"; if(bC)bC.style.width=p.clean+"%";
-    if(ml){ const m=moodOf(p); ml.textContent=m.f+" "+m.t; } const c=$("#coins"); if(c)c.textContent=S.coins; }
+    if(ml){ const m=moodOf(p); ml.textContent=m.f+" "+m.t; } if(nb)nb.textContent=needEmoji(p);
+    const c=$("#coins"); if(c)c.textContent=S.coins; }
+  function allFull(p){ return p.hunger>=90&&p.happy>=90&&p.clean>=90; }
+  function cuddle(){ const p=activePet(); if(!p)return;
+    p.happy=clamp(p.happy+8); p.lastUpdate=now(); S.coins+=1;
+    ["💖","💗","💕"].forEach((e,i)=>setTimeout(()=>floatAt($("#petActor"),e),i*90));
+    bounceActor(); Audio2.sfx("love"); toast(T("cuddle")); save(); updateWorldStats(); }
   function doCare(kind){
     const p=activePet(); if(!p)return;
     let key,emoji,word,sfx;
@@ -457,8 +497,9 @@
     if(p[key]>=100 && kind!=="love"){ toast(T("full")); floatAt($("#petActor"),"🥰"); Audio2.sfx("pop"); return; }
     p[key]=clamp(p[key]+(kind==="love"?12:26)); if(kind==="love")p.clean=clamp(p.clean+2);
     p.lastUpdate=now(); S.coins+=1;
-    floatAt($("#petActor"),emoji); toast(word); Audio2.sfx(sfx);
+    floatAt($("#petActor"),emoji); floatAt($("#petActor"),emoji); toast(word); Audio2.sfx(sfx);
     save(); updateWorldStats();
+    if(allFull(p)){ burst(); bounceActor(); Audio2.sfx("yay"); toast("🥰 "+T("so_happy")); }
   }
 
   /* ---------------- MY ANIMALS ---------------- */
@@ -558,6 +599,20 @@
     S.giftsSent++; const back=3+Math.floor(Math.random()*4); S.coins+=back; save(); syncTop();
     floatAt(screen,g); floatAt(screen,"💖"); Audio2.sfx("gift"); toast(`${f.av} ${f.nm}: ${T("sent")} (+🪙${back})`); }
 
+  /* ---------------- rename modal ---------------- */
+  function openRename(){ const p=activePet(); if(!p)return;
+    const wrap=document.createElement("div"); wrap.className="modal";
+    wrap.innerHTML=`<div class="sheet"><div class="step-h">${T("rename_q")}</div>
+      <input class="name" id="renameInput" maxlength="12" value="${p.name}">
+      <button class="btn b-mint btn-lg" id="renameOk">${T("ok")}</button></div>`;
+    app.appendChild(wrap);
+    const inp=wrap.querySelector("#renameInput"); setTimeout(()=>{ inp.focus(); inp.select(); },60);
+    const done=()=>{ const v=(inp.value||"").trim(); if(v){ p.name=v; save(); } wrap.remove(); if(S.screen==="home") renderHome(); };
+    wrap.querySelector("#renameOk").addEventListener("click",done);
+    inp.addEventListener("keydown",(e)=>{ if(e.key==="Enter") done(); });
+    wrap.addEventListener("click",(e)=>{ if(e.target===wrap) wrap.remove(); });
+  }
+
   /* ---------------- nav ---------------- */
   const NAVS=[["home","🌍","home"],["pets","🐾","pets"],["adopt","🏡","adopt"],["dress","👗","dress"],["show","🎤","show"],["gifts","🎁","gifts"]];
   function buildNav(){ nav.innerHTML=NAVS.map(([id,e,lab])=>`<button data-a="nav:${id}" data-nav="${id}"><span class="e">${e}</span>${T(lab)}</button>`).join("");
@@ -576,7 +631,7 @@
   app.addEventListener("click",(ev)=>{
     const t=ev.target.closest("[data-a]"); if(!t) return;
     const parts=t.getAttribute("data-a").split(":"); const k=parts[0], v=parts[1], v2=parts[2];
-    Audio2.ensure(); // first user gesture unlocks audio
+    Audio2.ensure();
     if(k==="lang"){ S.lang=v; ob.step=1; save(); if(!S.muted)Audio2.startMusic(); renderOnboard(); return; }
     if(k==="av"){ ob.avatar=AVATARS[+v]; renderOnboard(); return; }
     if(k==="col"){ ob.colorIx=+v; renderOnboard(); return; }
@@ -584,6 +639,7 @@
     if(k==="first"){ ob.species=v; startGame(); return; }
     if(k==="env"){ S.env=v; petPos={x:50,y:66}; petFlip=false; save(); renderHome(); return; }
     if(k==="care"){ doCare(v); return; }
+    if(k==="rename"){ openRename(); return; }
     if(k==="setactive"){ S.activeId=+v; petPos={x:50,y:66}; save(); go("home"); return; }
     if(k==="adopt"){ doAdopt(v); return; }
     if(k==="wear"){ doWear(v,v2); return; }
