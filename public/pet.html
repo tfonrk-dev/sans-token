@@ -22,7 +22,6 @@
   }
   #app{max-width:520px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;position:relative}
 
-  /* top bar */
   .top{display:flex;align-items:center;gap:8px;padding:12px 14px 8px}
   .me{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:999px;padding:5px 12px 5px 6px;
     box-shadow:0 4px 0 var(--line);font-weight:800;font-size:15px}
@@ -30,16 +29,15 @@
   .pill{display:flex;align-items:center;gap:5px;background:var(--card);border-radius:999px;padding:7px 13px;
     box-shadow:0 4px 0 var(--line);font-weight:900;font-size:16px}
   .grow{flex:1}
-  .lang{background:var(--card);border:none;border-radius:999px;padding:8px 12px;font:inherit;font-weight:900;
+  .iconbtn,.lang{background:var(--card);border:none;border-radius:999px;padding:8px 12px;font:inherit;font-weight:900;
     font-size:15px;box-shadow:0 4px 0 var(--line);cursor:pointer}
+  .iconbtn{padding:8px 11px;font-size:18px}
 
-  /* screens */
   .screen{flex:1;overflow-y:auto;overflow-x:hidden;padding:6px 14px 16px;-webkit-overflow-scrolling:touch}
   .screen::-webkit-scrollbar{width:0}
   h2.head{font-size:22px;font-weight:900;text-align:center;margin:6px 0 12px;color:var(--ink)}
   .sub{text-align:center;color:var(--soft);font-weight:700;font-size:14px;margin:-6px 0 14px}
 
-  /* buttons */
   .btn{border:none;border-radius:18px;font:inherit;font-weight:900;cursor:pointer;transition:transform .06s;
     display:inline-flex;align-items:center;justify-content:center;gap:8px;color:#fff}
   .btn:active{transform:translateY(3px)}
@@ -51,20 +49,46 @@
   .b-yellow{background:var(--yellow);color:#7a5200;box-shadow:0 6px 0 #e0a800}
   .b-orange{background:var(--orange);box-shadow:0 6px 0 #e0722b}
 
-  /* pet stage */
-  .stage{position:relative;width:200px;height:200px;margin:6px auto 4px}
-  .stage .pet{position:absolute;inset:0;display:grid;place-items:center;font-size:120px;line-height:1;
-    animation:bob 2.4s ease-in-out infinite;filter:drop-shadow(0 12px 10px rgba(120,60,120,.25))}
-  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-  .stage .acc{position:absolute;font-size:52px;line-height:1;pointer-events:none;z-index:3}
-  .acc.hat{top:2px;left:50%;transform:translateX(-50%)}
-  .acc.face{top:64px;left:50%;transform:translateX(-50%);font-size:44px}
-  .acc.neck{bottom:30px;left:50%;transform:translateX(-50%);font-size:40px}
-  .plate{background:var(--card);border-radius:26px;padding:14px;box-shadow:0 6px 0 var(--line);margin-bottom:12px}
-  .petname{text-align:center;font-size:22px;font-weight:900;margin-top:2px}
-  .mood{text-align:center;font-size:15px;font-weight:800;color:var(--soft);margin-bottom:8px}
+  /* ---------- WORLD (you are the animal, moving in environments) ---------- */
+  .envrow{display:flex;gap:8px;justify-content:center;margin:2px 0 10px}
+  .envbtn{width:52px;height:46px;border-radius:16px;background:var(--card);box-shadow:0 4px 0 var(--line);
+    border:none;font-size:24px;cursor:pointer;display:grid;place-items:center}
+  .envbtn:active{transform:translateY(3px)}
+  .envbtn.on{outline:4px solid var(--accent);outline-offset:-2px}
+  .scene{position:relative;height:300px;border-radius:26px;overflow:hidden;box-shadow:0 6px 0 var(--line);cursor:pointer}
+  .scene .ground{position:absolute;left:0;right:0;bottom:0;height:64px}
+  .decor{position:absolute;pointer-events:none;line-height:1}
+  .owner{position:absolute;bottom:60px;left:10%;font-size:52px;line-height:1;animation:wave 2.6s ease-in-out infinite;
+    transform-origin:bottom center;pointer-events:none;filter:drop-shadow(0 8px 6px rgba(0,0,0,.18));z-index:4}
+  @keyframes wave{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+  .actor{position:absolute;font-size:84px;line-height:1;z-index:6;transition:left .9s ease,top .9s ease;
+    filter:drop-shadow(0 10px 8px rgba(0,0,0,.22));will-change:left,top}
+  .actor .body{display:inline-block;animation:bob 1.6s ease-in-out infinite}
+  .actor .acc{position:absolute;line-height:1;pointer-events:none}
+  .actor .acc.hat{top:-30px;left:50%;transform:translateX(-50%);font-size:38px}
+  .actor .acc.face{top:20px;left:50%;transform:translateX(-50%);font-size:30px}
+  .actor .acc.neck{bottom:-6px;left:50%;transform:translateX(-50%);font-size:28px}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  .scene.air .actor .body{animation:floaty 2.6s ease-in-out infinite}
+  @keyframes floaty{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-22px) rotate(3deg)}}
+  .scene.sea .actor .body{animation:sway 2.2s ease-in-out infinite}
+  @keyframes sway{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-6px) rotate(6deg)}}
+  .tapme{position:absolute;top:8px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.85);
+    color:var(--soft);font-weight:800;font-size:12px;padding:5px 12px;border-radius:999px;pointer-events:none;z-index:7}
 
-  /* stat bars */
+  .env-home{background:linear-gradient(180deg,#ffe9c7,#ffd9e6)}
+  .env-home .ground{background:linear-gradient(180deg,#e8b98a,#d89a6a)}
+  .env-nature{background:linear-gradient(180deg,#bfe9ff,#e6ffd9)}
+  .env-nature .ground{background:linear-gradient(180deg,#7fd06a,#4faf3e)}
+  .env-sea{background:linear-gradient(180deg,#bfeaff,#5bc8ff)}
+  .env-sea .ground{background:linear-gradient(180deg,#3aa8ee,#1f7fc8);opacity:.9}
+  .env-air{background:linear-gradient(180deg,#cfe9ff,#f0d9ff)}
+  .env-air .ground{background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,.1))}
+
+  .petname{text-align:center;font-size:22px;font-weight:900;margin-top:10px}
+  .mood{text-align:center;font-size:15px;font-weight:800;color:var(--soft);margin-bottom:8px}
+  .plate{background:var(--card);border-radius:26px;padding:14px;box-shadow:0 6px 0 var(--line);margin-bottom:12px}
+
   .stats{display:flex;flex-direction:column;gap:8px;margin:4px 6px 2px}
   .stat{display:flex;align-items:center;gap:9px;font-weight:800;font-size:14px}
   .stat .ic{font-size:20px;width:26px;text-align:center}
@@ -74,28 +98,24 @@
   .bar.j>i{background:linear-gradient(90deg,#ff7eb6,#ff4f9e)}
   .bar.c>i{background:linear-gradient(90deg,#5bd0ff,#5b8cff)}
 
-  /* care buttons row */
   .care{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:12px}
   .care .btn{flex-direction:column;gap:3px;font-size:13px;padding:12px 4px;border-radius:20px}
   .care .btn .e{font-size:26px}
 
-  /* grids */
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
   .card{background:var(--card);border-radius:22px;padding:12px 8px;text-align:center;box-shadow:0 5px 0 var(--line);
     cursor:pointer;transition:transform .06s;position:relative}
   .card:active{transform:translateY(3px)}
   .card .big{font-size:52px;line-height:1.1}
   .card .nm{font-weight:900;font-size:14px;margin-top:4px}
-  .card .pr{font-weight:900;font-size:13px;color:var(--soft);margin-top:3px}
   .card.sel{outline:4px solid var(--accent);outline-offset:-2px}
   .card .tag{position:absolute;top:-8px;right:-6px;background:var(--mint);color:#fff;font-size:11px;font-weight:900;
     padding:3px 8px;border-radius:999px;box-shadow:0 3px 0 #27a87e}
   .mini-stat{font-size:11px;color:var(--soft);font-weight:800;margin-top:2px}
 
-  /* dress up slots */
   .slots{display:flex;flex-direction:column;gap:12px}
-  .slotrow h3{font-size:15px;font-weight:900;margin:2px 4px 6px;display:flex;align-items:center;gap:6px}
-  .items{display:flex;gap:9px;overflow-x:auto;padding:2px 2px 8px}
+  .slotrow h3{font-size:15px;font-weight:900;margin:2px 4px 6px}
+  .items{display:flex;gap:9px;overflow-x:auto;padding:2px 2px 10px}
   .items::-webkit-scrollbar{height:0}
   .item{flex:0 0 auto;width:64px;height:64px;border-radius:18px;background:var(--card);box-shadow:0 4px 0 var(--line);
     display:grid;place-items:center;font-size:30px;cursor:pointer;position:relative}
@@ -105,7 +125,6 @@
     font-size:10px;font-weight:900;padding:1px 6px;border-radius:999px;white-space:nowrap}
   .item .none{font-size:14px;font-weight:900;color:var(--soft)}
 
-  /* bottom nav */
   .nav{display:flex;justify-content:space-around;background:var(--card);padding:7px 4px calc(7px + env(safe-area-inset-bottom));
     box-shadow:0 -4px 16px rgba(120,60,120,.12);border-top-left-radius:22px;border-top-right-radius:22px}
   .nav button{border:none;background:transparent;font:inherit;font-weight:800;font-size:11px;color:var(--soft);
@@ -114,7 +133,6 @@
   .nav button.on{color:var(--accent-d)}
   .nav button.on .e{transform:translateY(-3px) scale(1.15)}
 
-  /* welcome / onboarding */
   .center{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;min-height:100%;text-align:center;padding:20px 8px}
   .logo{font-size:64px;animation:bob 2.4s ease-in-out infinite}
   .title{font-size:34px;font-weight:900;letter-spacing:-.5px;background:linear-gradient(120deg,var(--pink-d),var(--purple));
@@ -130,24 +148,25 @@
   input.name:focus{outline:none;box-shadow:inset 0 0 0 4px var(--accent-d)}
   .step-h{font-size:20px;font-weight:900}
 
-  /* fashion show */
   .runway{background:linear-gradient(180deg,#2a1740,#43265f);border-radius:26px;padding:16px 10px;color:#fff;text-align:center;
     box-shadow:0 6px 0 rgba(0,0,0,.2);position:relative;overflow:hidden}
   .runway .spot{position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:180px;height:180px;
-    background:radial-gradient(circle,rgba(255,255,180,.5),transparent 70%)}
+    background:radial-gradient(circle,rgba(255,255,180,.5),transparent 70%);animation:pulse 1.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.7}50%{opacity:1}}
+  .stage2{position:relative;height:150px;display:grid;place-items:center}
+  .stage2 .pet{font-size:96px;animation:bob 1.4s ease-in-out infinite;position:relative}
+  .stage2 .acc{position:absolute;line-height:1}
+  .row-show{display:flex;justify-content:center;align-items:flex-end;gap:10px;flex-wrap:wrap}
   .contestant{display:inline-flex;flex-direction:column;align-items:center;margin:4px}
-  .row-show{display:flex;justify-content:center;align-items:flex-end;gap:6px;flex-wrap:wrap}
   .medal{font-size:15px;font-weight:900;margin-top:4px}
   .scoreline{font-size:14px;font-weight:800;opacity:.9}
 
-  /* friends / gifts */
   .friend{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:20px;padding:10px 12px;
     box-shadow:0 4px 0 var(--line);margin-bottom:10px}
   .friend .fav{font-size:34px}
   .friend .fn{font-weight:900;font-size:16px;flex:1}
-  .friend .hearts{font-size:13px;color:var(--soft);font-weight:800}
+  .friend.sel{outline:4px solid var(--accent);outline-offset:-2px}
 
-  /* floating feedback */
   .float{position:absolute;font-size:34px;pointer-events:none;z-index:40;animation:up 1s ease-out forwards}
   @keyframes up{0%{opacity:1;transform:translateY(0) scale(.6)}30%{transform:translateY(-20px) scale(1.2)}
     100%{opacity:0;transform:translateY(-90px) scale(1)}}
@@ -162,11 +181,12 @@
 </head>
 <body>
 <div id="app">
-  <div class="top" id="topbar">
+  <div class="top hidden" id="topbar">
     <div class="me" id="meChip"><span class="av" id="meAv">👧</span><span id="meName">…</span></div>
     <div class="grow"></div>
     <div class="pill">🪙 <span id="coins">0</span></div>
     <div class="pill">🏆 <span id="trophies">0</span></div>
+    <button class="iconbtn" id="soundBtn" aria-label="Sound">🔊</button>
     <button class="lang" id="langBtn">TR</button>
   </div>
 
@@ -184,52 +204,111 @@
   const clamp = (n)=>Math.max(0,Math.min(100,n));
   const now = ()=>Date.now();
 
+  /* ================= AUDIO (original, royalty-free, K-pop energy) ================= */
+  const Audio2 = (function(){
+    let ac=null, master=null, musicGain=null, sfxGain=null, running=false, stepTimer=null, step=0, noiseBuf=null;
+    const BPM=124, stepMs=60000/BPM/4; // 16th notes
+    const mtof=(m)=>440*Math.pow(2,(m-69)/12);
+    const PROG=[[60,64,67],[55,59,62],[57,60,64],[53,57,60]]; // C G Am F
+    const GATE=[1,0,1,1, 0,1,1,0, 1,0,1,1, 0,1,0,1];
+    function ensure(){
+      if(ac) return true;
+      try{
+        const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return false;
+        ac=new AC();
+        master=ac.createGain(); master.gain.value=0.9; master.connect(ac.destination);
+        musicGain=ac.createGain(); musicGain.gain.value=0.22; musicGain.connect(master);
+        sfxGain=ac.createGain(); sfxGain.gain.value=0.6; sfxGain.connect(master);
+        noiseBuf=ac.createBuffer(1, Math.floor(ac.sampleRate*0.4), ac.sampleRate);
+        const d=noiseBuf.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+        return true;
+      }catch(e){ return false; }
+    }
+    function tone(freq,dur,type,vol,dest,when){
+      const t=ac.currentTime+(when||0);
+      const o=ac.createOscillator(), g=ac.createGain();
+      o.type=type||"triangle"; o.frequency.setValueAtTime(freq,t);
+      g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol,t+0.012);
+      g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+      o.connect(g).connect(dest||musicGain); o.start(t); o.stop(t+dur+0.03);
+    }
+    function noise(dur,hp,vol,dest){
+      const t=ac.currentTime;
+      const s=ac.createBufferSource(); s.buffer=noiseBuf;
+      const f=ac.createBiquadFilter(); f.type="highpass"; f.frequency.value=hp||6000;
+      const g=ac.createGain(); g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+      s.connect(f).connect(g).connect(dest||sfxGain); s.start(t); s.stop(t+dur+0.02);
+    }
+    function kick(){
+      const t=ac.currentTime;
+      const o=ac.createOscillator(), g=ac.createGain();
+      o.type="sine"; o.frequency.setValueAtTime(150,t); o.frequency.exponentialRampToValueAtTime(45,t+0.12);
+      g.gain.setValueAtTime(0.9,t); g.gain.exponentialRampToValueAtTime(0.0001,t+0.18);
+      o.connect(g).connect(musicGain); o.start(t); o.stop(t+0.2);
+    }
+    function tick(){
+      const bar=Math.floor(step/16)%4, s=step%16, chord=PROG[bar];
+      if(s%4===0) kick();
+      if(s%2===0) noise(0.03,9000,0.10,musicGain);
+      if(s===4||s===12) noise(0.06,2500,0.18,musicGain);
+      if(GATE[s]){ const n=chord[step%chord.length]+12; tone(mtof(n),0.18,"square",0.10); }
+      if(s===0||s===8) tone(mtof(chord[0]-12),0.22,"sawtooth",0.14);
+      if(s===6||s===14) tone(mtof(chord[1]-12),0.16,"sawtooth",0.10);
+      step=(step+1)%64;
+    }
+    function startMusic(){ if(!ensure()||running) return; if(ac.state==="suspended")ac.resume(); running=true; step=0; stepTimer=setInterval(tick,stepMs); }
+    function stopMusic(){ running=false; if(stepTimer){clearInterval(stepTimer);stepTimer=null;} }
+    function setMuted(m){ if(!ensure())return; master.gain.value=m?0:0.9; if(m)stopMusic(); else startMusic(); }
+    const SFX={
+      feed(){ tone(mtof(72),0.09,"square",0.5,sfxGain); tone(mtof(76),0.10,"square",0.5,sfxGain,0.08); },
+      play(){ tone(mtof(67),0.10,"sine",0.5,sfxGain); tone(mtof(79),0.12,"sine",0.5,sfxGain,0.06); },
+      bath(){ noise(0.35,1200,0.4); tone(mtof(84),0.2,"sine",0.3,sfxGain,0.05); },
+      love(){ [72,76,79,84].forEach((n,i)=>tone(mtof(n),0.16,"triangle",0.45,sfxGain,i*0.07)); },
+      adopt(){ [60,64,67,72,76].forEach((n,i)=>tone(mtof(n),0.18,"square",0.4,sfxGain,i*0.06)); },
+      show(){ [60,67,72,76,79].forEach((n,i)=>tone(mtof(n),0.3,"sawtooth",0.35,sfxGain,i*0.05)); noise(0.5,3000,0.25); },
+      gift(){ [79,84,88].forEach((n,i)=>tone(mtof(n),0.14,"triangle",0.45,sfxGain,i*0.06)); },
+      pop(){ tone(mtof(74),0.07,"square",0.35,sfxGain); }
+    };
+    return { ensure, startMusic, stopMusic, setMuted, sfx:(k)=>{ if(ensure() && SFX[k]) SFX[k](); } };
+  })();
+
   /* ---------------- language ---------------- */
   const DICT = {
-    en:{
-      pickLang:"Choose language", name_q:"What is your name?", type_here:"Type your name…",
-      pick_you:"Pick you!", pick_color:"Pick your color", pick_first:"Pick your first pet! 🐾",
-      start:"Start playing!", next:"Next →", welcome_to:"Adoption Pet",
-      home:"Home", pets:"My Pets", adopt:"Adopt", dress:"Dress Up", show:"Show", gifts:"Gifts",
-      feed:"Feed", play:"Play", wash:"Wash", love:"Love",
+    en:{ pickLang:"Choose language", name_q:"What is your name?", type_here:"Type your name…",
+      pick_you:"Pick you!", pick_color:"Pick your color", pick_first:"Which animal are you? 🐾",
+      next:"Next →", home:"World", pets:"Animals", adopt:"Adopt", dress:"Dress Up", show:"Show", gifts:"Gifts",
+      feed:"Feed", play:"Play", bath:"Bath", love:"Love",
       hunger:"Hungry", happy:"Happy", clean:"Clean",
-      full:"All full! 🥰", yum:"Yum!", fun:"So fun!", sparkly:"Sparkly!", love_you:"I love you!",
-      my_pets:"My Pets", tap_care:"Tap a pet to take care of it", active:"Caring",
+      full:"All full! 🥰", yum:"Yum!", fun:"So fun!", sparkly:"Splash!", love_you:"I love you!",
+      tap_move:"Tap to walk around!", env_home:"Home", env_nature:"Nature", env_sea:"Sea", env_air:"Sky",
+      my_pets:"My Animals", tap_care:"Tap an animal to become it", active:"You",
       adopt_center:"Adoption Center", adopt_this:"Adopt", adopted:"Welcome home! 🏡",
-      need_coins:"You need more coins 🪙", owned:"Yours",
+      need_coins:"You need more coins 🪙",
       dressup:"Dress Up", hats:"Hats 🎩", face:"Glasses 👓", neck:"Necklaces 🎀",
-      none:"None", wear:"Wear", buy:"Buy", worn:"Worn!",
-      fashion:"Fashion Show", enter_show:"Go on the runway! 🌟", judging:"The judges are watching…",
-      you:"You", winner:"Winner!", you_won:"You won", coins_word:"coins",
-      again:"Again", back:"Back", the_others:"The others",
-      gifts_t:"Send a Gift 🎁", pick_friend:"Pick a friend", pick_gift:"Pick a gift", send:"Send 🎁",
-      sent:"Thank you! 💖", got_back:"gave you", friends_word:"gifts sent",
-      change_pet:"Change pet", newpet_name:"Name your pet!", ok:"OK!",
+      none:"None", worn:"Worn!",
+      fashion:"Pop Star Show", enter_show:"Go on stage! 🌟",
+      you:"You", winner:"Winner!", you_won:"You won", coins_word:"coins", again:"Again",
+      gifts_t:"Send a Gift 🎁", pick_friend:"Pick a friend", pick_gift:"Pick a gift", send:"Send 🎁", sent:"Thank you! 💖",
     },
-    tr:{
-      pickLang:"Dil seç", name_q:"Adın ne?", type_here:"Adını yaz…",
-      pick_you:"Kendini seç!", pick_color:"Rengini seç", pick_first:"İlk hayvanını seç! 🐾",
-      start:"Oyna!", next:"İleri →", welcome_to:"Adoption Pet",
-      home:"Ev", pets:"Hayvanlarım", adopt:"Sahiplen", dress:"Giydir", show:"Şov", gifts:"Hediye",
-      feed:"Besle", play:"Oyna", wash:"Yıka", love:"Sev",
+    tr:{ pickLang:"Dil seç", name_q:"Adın ne?", type_here:"Adını yaz…",
+      pick_you:"Kendini seç!", pick_color:"Rengini seç", pick_first:"Hangi hayvansın? 🐾",
+      next:"İleri →", home:"Dünya", pets:"Hayvanlar", adopt:"Sahiplen", dress:"Giydir", show:"Şov", gifts:"Hediye",
+      feed:"Besle", play:"Oyna", bath:"Banyo", love:"Sev",
       hunger:"Aç", happy:"Mutlu", clean:"Temiz",
-      full:"Hepsi dolu! 🥰", yum:"Mmm!", fun:"Çok eğlenceli!", sparkly:"Pırıl pırıl!", love_you:"Seni seviyorum!",
-      my_pets:"Hayvanlarım", tap_care:"Bakmak için bir hayvana dokun", active:"Bakılan",
+      full:"Hepsi dolu! 🥰", yum:"Mmm!", fun:"Çok eğlenceli!", sparkly:"Şıpır!", love_you:"Seni seviyorum!",
+      tap_move:"Yürümek için dokun!", env_home:"Ev", env_nature:"Doğa", env_sea:"Deniz", env_air:"Gökyüzü",
+      my_pets:"Hayvanlarım", tap_care:"Olmak için bir hayvana dokun", active:"Sen",
       adopt_center:"Sahiplenme Evi", adopt_this:"Sahiplen", adopted:"Eve hoş geldin! 🏡",
-      need_coins:"Daha çok altın lazım 🪙", owned:"Senin",
+      need_coins:"Daha çok altın lazım 🪙",
       dressup:"Giydir", hats:"Şapkalar 🎩", face:"Gözlükler 👓", neck:"Kolyeler 🎀",
-      none:"Yok", wear:"Giy", buy:"Al", worn:"Giydi!",
-      fashion:"Moda Şovu", enter_show:"Podyuma çık! 🌟", judging:"Jüri izliyor…",
-      you:"Sen", winner:"Kazanan!", you_won:"Kazandın", coins_word:"altın",
-      again:"Tekrar", back:"Geri", the_others:"Diğerleri",
-      gifts_t:"Hediye Gönder 🎁", pick_friend:"Bir arkadaş seç", pick_gift:"Bir hediye seç", send:"Gönder 🎁",
-      sent:"Teşekkürler! 💖", got_back:"sana verdi", friends_word:"hediye gönderildi",
-      change_pet:"Hayvan değiştir", newpet_name:"Hayvanına ad ver!", ok:"Tamam!",
+      none:"Yok", worn:"Giydi!",
+      fashion:"Pop Yıldızı Şovu", enter_show:"Sahneye çık! 🌟",
+      you:"Sen", winner:"Kazanan!", you_won:"Kazandın", coins_word:"altın", again:"Tekrar",
+      gifts_t:"Hediye Gönder 🎁", pick_friend:"Bir arkadaş seç", pick_gift:"Bir hediye seç", send:"Gönder 🎁", sent:"Teşekkürler! 💖",
     }
   };
   const T = (k)=> (DICT[S.lang] && DICT[S.lang][k]) || DICT.en[k] || k;
 
-  /* ---------------- data pools ---------------- */
   const SPECIES = ["🐶","🐱","🐰","🦊","🐼","🐨","🐯","🦁","🐮","🐷","🐸","🐵","🐧","🐢","🦄","🐹"];
   const PETNAMES = ["Coco","Bella","Max","Luna","Milo","Kiki","Rocky","Daisy","Simba","Nala","Pat","Zozo","Pixie","Bubu","Star","Momo"];
   const AVATARS = ["👧","🧒","👦","👩","🧑","👶","👸","🦸‍♀️"];
@@ -238,376 +317,274 @@
     {v:"#4fd6a8",d:"#27a87e"},{v:"#ffd24a",d:"#e0a800"},{v:"#ff9d5c",d:"#e0722b"},
     {v:"#ff6b6b",d:"#e03b3b"},{v:"#3fd0d0",d:"#1fa8a8"}
   ];
-  const HATS = ["👑","🎩","🧢","🎀","🎓","⭐","🌸","🍓"];
-  const FACES = ["🕶️","👓","🥽","😎"];
-  const NECKS = ["🧣","🎀","💎","🔔","🌺","🎗️"];
-  const FRIENDS = [
-    {av:"🐻",nm:"Teddy"},{av:"🦄",nm:"Luna"},{av:"🐰",nm:"Rosie"},
-    {av:"🐥",nm:"Pip"},{av:"🐨",nm:"Coco"},{av:"🐙",nm:"Ollie"}
+  const HATS=["👑","🎩","🧢","🎀","🎓","⭐","🌸","🍓"], FACES=["🕶️","👓","🥽","😎"], NECKS=["🧣","🎀","💎","🔔","🌺","🎗️"];
+  const FRIENDS=[{av:"🐻",nm:"Teddy"},{av:"🦄",nm:"Luna"},{av:"🐰",nm:"Rosie"},{av:"🐥",nm:"Pip"},{av:"🐨",nm:"Coco"},{av:"🐙",nm:"Ollie"}];
+  const GIFTS=["🎁","🌸","🎂","🍭","🧸","🎈","🍩","🌈"];
+  const PRICES={ adopt:25, hat:12, face:12, neck:10 };
+  const ENVS=[
+    {id:"home", ic:"🏠", decor:[["🛋️",70,60],["🪴",12,58],["🖼️",44,10],["🧸",82,52]]},
+    {id:"nature", ic:"🌳", decor:[["🌳",8,40],["🌲",80,36],["🌸",30,64],["🦋",60,20],["☀️",84,8]]},
+    {id:"sea", ic:"🌊", decor:[["⛵",18,14],["🐚",70,66],["🐠",44,50],["🌊",8,60],["🌊",80,60]]},
+    {id:"air", ic:"☁️", decor:[["☁️",12,20],["☁️",70,14],["🌈",40,50],["⭐",84,40],["🎈",24,60]]},
   ];
-  const GIFTS = ["🎁","🌸","🎂","🍭","🧸","🎈","🍩","🌈"];
-  const PRICES = { adopt:25, hat:12, face:12, neck:10, gift:0 };
 
   /* ---------------- state ---------------- */
-  const KEY = "adoptionPet.save.v1";
-  let S = null;
-  function fresh(){
-    return { started:false, lang:"en", name:"", avatar:"👧", colorIx:0,
-      coins:80, trophies:0, giftsSent:0, screen:"home",
-      pets:[], activeId:null, nextId:1, lastTick:now() };
-  }
-  function load(){
-    try{ const raw=localStorage.getItem(KEY); if(raw){ S=JSON.parse(raw); return; } }catch(e){}
-    S=fresh();
-  }
+  const KEY="adoptionPet.save.v1";
+  let S=null;
+  function fresh(){ return { started:false, lang:"en", name:"", avatar:"👧", colorIx:0,
+    coins:80, trophies:0, giftsSent:0, screen:"home", env:"home", muted:false,
+    pets:[], activeId:null, nextId:1, lastTick:now() }; }
+  function load(){ try{ const r=localStorage.getItem(KEY); if(r){ S=JSON.parse(r); } }catch(e){}
+    if(!S) S=fresh();
+    if(!S.env) S.env="home"; if(typeof S.muted!=="boolean") S.muted=false; }
   function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+  function makePet(sp){ return { id:S.nextId++, sp, name:PETNAMES[Math.floor(Math.random()*PETNAMES.length)],
+    hunger:80, happy:80, clean:80, outfit:{hat:null,face:null,neck:null}, lastUpdate:now() }; }
+  const activePet=()=> S.pets.find(p=>p.id===S.activeId)||S.pets[0]||null;
 
-  function makePet(species){
-    const nm = PETNAMES[Math.floor(Math.random()*PETNAMES.length)];
-    return { id:S.nextId++, sp:species, name:nm, hunger:80, happy:80, clean:80,
-      outfit:{hat:null,face:null,neck:null}, lastUpdate:now() };
-  }
-  const activePet = ()=> S.pets.find(p=>p.id===S.activeId) || S.pets[0] || null;
+  function decayPet(p,t){ const m=Math.max(0,(t-(p.lastUpdate||t))/60000);
+    p.hunger=clamp(p.hunger-m*0.40); p.happy=clamp(p.happy-m*0.30); p.clean=clamp(p.clean-m*0.22); p.lastUpdate=t; }
+  function tickDecay(){ const t=now(); S.pets.forEach(p=>decayPet(p,t)); S.lastTick=t; save();
+    if(S.started&&S.screen==="home") updateWorldStats(); else { const c=$("#coins"); if(c)c.textContent=S.coins; } }
 
-  /* ---------------- real-time care decay ---------------- */
-  function decayPet(p, t){
-    const mins = Math.max(0,(t - (p.lastUpdate||t))/60000);
-    p.hunger = clamp(p.hunger - mins*0.40); // ~needs feeding every few hours, gently
-    p.happy  = clamp(p.happy  - mins*0.30);
-    p.clean  = clamp(p.clean  - mins*0.22);
-    p.lastUpdate = t;
-  }
-  function tick(){
-    const t = now();
-    S.pets.forEach(p=>decayPet(p,t));
-    S.lastTick = t; save();
-    if(S.started && (S.screen==="home")) renderHome();
-    else { $("#coins").textContent=S.coins; }
-  }
-
-  /* ---------------- theme ---------------- */
-  function applyTheme(){
-    const c = COLORS[S.colorIx]||COLORS[0];
+  function applyTheme(){ const c=COLORS[S.colorIx]||COLORS[0];
     document.documentElement.style.setProperty("--accent",c.v);
     document.documentElement.style.setProperty("--accent-d",c.d);
-    document.querySelector(".me .av").style.background=c.v;
-  }
+    const av=document.querySelector(".me .av"); if(av) av.style.background=c.v; }
 
-  /* ---------------- feedback ---------------- */
   let toastTimer=null;
-  function toast(msg){
-    toastEl.textContent=msg; toastEl.classList.add("show");
-    clearTimeout(toastTimer); toastTimer=setTimeout(()=>toastEl.classList.remove("show"),1400);
-  }
-  function floatEmoji(emoji){
-    const el=document.createElement("div"); el.className="float"; el.textContent=emoji;
-    const stage=document.querySelector(".stage")||screen;
-    const r=stage.getBoundingClientRect(), a=app.getBoundingClientRect();
-    el.style.left=(r.left-a.left + r.width/2 - 17 + (Math.random()*40-20))+"px";
-    el.style.top=(r.top-a.top + 30)+"px";
-    app.appendChild(el); setTimeout(()=>el.remove(),1000);
-  }
+  function toast(m){ toastEl.textContent=m; toastEl.classList.add("show");
+    clearTimeout(toastTimer); toastTimer=setTimeout(()=>toastEl.classList.remove("show"),1400); }
+  function floatAt(el,emoji){ const box=el||screen; const r=box.getBoundingClientRect(), a=app.getBoundingClientRect();
+    const d=document.createElement("div"); d.className="float"; d.textContent=emoji;
+    d.style.left=(r.left-a.left+r.width/2-17+(Math.random()*30-15))+"px"; d.style.top=(r.top-a.top+r.height/2-40)+"px";
+    app.appendChild(d); setTimeout(()=>d.remove(),1000); }
 
-  /* ---------------- top bar ---------------- */
-  function syncTop(){
-    $("#coins").textContent=S.coins;
-    $("#trophies").textContent=S.trophies;
-    $("#meName").textContent=S.name||"…";
-    $("#meAv").textContent=S.avatar;
-    $("#langBtn").textContent = S.lang==="en" ? "TR" : "EN";
-    $("#topbar").classList.toggle("hidden", !S.started);
-  }
+  function syncTop(){ const c=$("#coins"); if(c)c.textContent=S.coins; const tr=$("#trophies"); if(tr)tr.textContent=S.trophies;
+    const mn=$("#meName"); if(mn)mn.textContent=S.name||"…"; const mv=$("#meAv"); if(mv)mv.textContent=S.avatar;
+    const lb=$("#langBtn"); if(lb)lb.textContent=S.lang==="en"?"TR":"EN"; const sb=$("#soundBtn"); if(sb)sb.textContent=S.muted?"🔇":"🔊";
+    $("#topbar").classList.toggle("hidden",!S.started); }
 
   /* ---------------- onboarding ---------------- */
-  let ob = { step:0, name:"", avatar:"👧", colorIx:0, species:null };
+  let ob={ step:0, name:"", avatar:"👧", colorIx:0, species:null, _choices:null };
+  function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
   function renderOnboard(){
     nav.classList.add("hidden"); $("#topbar").classList.add("hidden");
     let h="";
     if(ob.step===0){
-      h=`<div class="center">
-        <div class="logo">🐾</div>
-        <div class="title">Adoption Pet</div>
+      h=`<div class="center"><div class="logo">🐾</div><div class="title">Adoption Pet</div>
         <div class="step-h">${DICT.en.pickLang} / ${DICT.tr.pickLang}</div>
         <div class="pickrow">
           <button class="btn b-pink btn-lg" style="width:auto;padding:14px 26px" data-a="lang:en">🇬🇧 English</button>
-          <button class="btn b-purple btn-lg" style="width:auto;padding:14px 26px" data-a="lang:tr">🇹🇷 Türkçe</button>
-        </div>
-      </div>`;
+          <button class="btn b-purple btn-lg" style="width:auto;padding:14px 26px" data-a="lang:tr">🇹🇷 Türkçe</button></div></div>`;
     } else if(ob.step===1){
-      h=`<div class="center">
-        <div class="logo">✨</div>
-        <div class="step-h">${T("name_q")}</div>
+      h=`<div class="center"><div class="logo">✨</div><div class="step-h">${T("name_q")}</div>
         <input class="name" id="nameInput" maxlength="12" placeholder="${T("type_here")}" value="${ob.name}">
         <div class="step-h" style="margin-top:6px">${T("pick_you")}</div>
         <div class="pickrow">${AVATARS.map((a,i)=>`<div class="pick ${ob.avatar===a?'on':''}" data-a="av:${i}">${a}</div>`).join("")}</div>
-        <button class="btn b-mint btn-lg" style="max-width:320px" data-a="ob:2">${T("next")}</button>
-      </div>`;
+        <button class="btn b-mint btn-lg" style="max-width:320px" data-a="ob:2">${T("next")}</button></div>`;
     } else if(ob.step===2){
-      h=`<div class="center">
-        <div class="logo">${ob.avatar}</div>
-        <div class="step-h">${T("pick_color")}</div>
+      h=`<div class="center"><div class="logo">${ob.avatar}</div><div class="step-h">${T("pick_color")}</div>
         <div class="pickrow">${COLORS.map((c,i)=>`<div class="colr ${ob.colorIx===i?'on':''}" style="background:${c.v}" data-a="col:${i}"></div>`).join("")}</div>
-        <button class="btn btn-lg" style="max-width:320px;background:${COLORS[ob.colorIx].v};box-shadow:0 6px 0 ${COLORS[ob.colorIx].d}" data-a="ob:3">${T("next")}</button>
-      </div>`;
-    } else if(ob.step===3){
-      const choices = ob._choices || (ob._choices = shuffle(SPECIES.slice()).slice(0,6));
-      h=`<div class="center">
-        <div class="step-h">${T("pick_first")}</div>
-        <div class="grid" style="max-width:360px;width:100%">
-          ${choices.map(sp=>`<div class="card" data-a="first:${sp}"><div class="big">${sp}</div></div>`).join("")}
-        </div>
-      </div>`;
+        <button class="btn btn-lg" style="max-width:320px;background:${COLORS[ob.colorIx].v};box-shadow:0 6px 0 ${COLORS[ob.colorIx].d}" data-a="ob:3">${T("next")}</button></div>`;
+    } else {
+      const ch=ob._choices||(ob._choices=shuffle(SPECIES.slice()).slice(0,6));
+      h=`<div class="center"><div class="step-h">${T("pick_first")}</div>
+        <div class="grid" style="max-width:360px;width:100%">${ch.map(sp=>`<div class="card" data-a="first:${sp}"><div class="big">${sp}</div></div>`).join("")}</div></div>`;
     }
     screen.innerHTML=h;
     const ni=$("#nameInput"); if(ni){ ni.addEventListener("input",e=>ob.name=e.target.value); setTimeout(()=>ni.focus(),100); }
   }
-  function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
-  /* ---------------- HOME ---------------- */
-  function moodOf(p){
-    const avg=(p.hunger+p.happy+p.clean)/3;
-    if(avg>=75) return {f:"😍",t:T("love_you")};
-    if(avg>=50) return {f:"🙂",t:T("happy")};
-    if(avg>=28) return {f:"😟",t:"…"};
-    return {f:"😢",t:"…"};
-  }
-  function petStageHTML(p,big){
-    const o=p.outfit;
-    return `<div class="stage">
-      <div class="pet" style="font-size:${big||120}px">${p.sp}</div>
-      ${o.hat?`<span class="acc hat">${o.hat}</span>`:""}
-      ${o.face?`<span class="acc face">${o.face}</span>`:""}
-      ${o.neck?`<span class="acc neck">${o.neck}</span>`:""}
-    </div>`;
-  }
-  function barHTML(cls,ic,label,val){
-    return `<div class="stat"><span class="ic">${ic}</span><span style="width:54px">${label}</span>
-      <span class="bar ${cls}"><i style="width:${clamp(val)}%"></i></span></div>`;
-  }
+  /* ---------------- WORLD (you = the animal, in environments) ---------------- */
+  let petPos={x:50,y:66}, petFlip=false;
+  function moodOf(p){ const a=(p.hunger+p.happy+p.clean)/3;
+    if(a>=75)return{f:"😍",t:T("love_you")}; if(a>=50)return{f:"🙂",t:T("happy")};
+    if(a>=28)return{f:"😟",t:"…"}; return{f:"😢",t:"…"}; }
+  function actorHTML(p){ const o=p.outfit;
+    return `<div class="actor" id="petActor" style="left:${petPos.x}%;top:${petPos.y}%;transform:translate(-50%,-100%) scaleX(${petFlip?-1:1})">
+      <span class="body">${p.sp}</span>
+      ${o.hat?`<span class="acc hat">${o.hat}</span>`:""}${o.face?`<span class="acc face">${o.face}</span>`:""}${o.neck?`<span class="acc neck">${o.neck}</span>`:""}
+    </div>`; }
   function renderHome(){
-    const p=activePet();
-    if(!p){ S.screen="adopt"; return renderAdopt(); }
-    const m=moodOf(p);
+    const p=activePet(); if(!p){ S.screen="adopt"; return renderAdopt(); }
+    const env=ENVS.find(e=>e.id===S.env)||ENVS[0];
     screen.innerHTML=`
-      <div class="plate">
-        ${petStageHTML(p)}
-        <div class="petname">${p.name}</div>
-        <div class="mood">${m.f} ${m.t}</div>
-        <div class="stats">
-          ${barHTML("h","🍖",T("hunger"),p.hunger)}
-          ${barHTML("j","💖",T("happy"),p.happy)}
-          ${barHTML("c","🫧",T("clean"),p.clean)}
-        </div>
-        <div class="care">
-          <button class="btn b-orange" data-a="care:feed"><span class="e">🍖</span>${T("feed")}</button>
-          <button class="btn b-pink" data-a="care:play"><span class="e">🎾</span>${T("play")}</button>
-          <button class="btn b-blue" data-a="care:wash"><span class="e">🫧</span>${T("wash")}</button>
-          <button class="btn b-purple" data-a="care:love"><span class="e">❤️</span>${T("love")}</button>
-        </div>
+      <div class="envrow">${ENVS.map(e=>`<button class="envbtn ${e.id===S.env?'on':''}" data-a="env:${e.id}">${e.ic}</button>`).join("")}</div>
+      <div class="scene env-${env.id}" id="scene">
+        <div class="tapme">${T("tap_move")}</div>
+        ${env.decor.map(d=>`<span class="decor" style="left:${d[1]}%;top:${d[2]}%;font-size:${d[0]==='☀️'||d[0]==='🌈'?38:34}px">${d[0]}</span>`).join("")}
+        <div class="ground"></div>
+        <div class="owner">${S.avatar}</div>
+        ${actorHTML(p)}
+      </div>
+      <div class="petname">${p.name}</div>
+      <div class="mood" id="moodLine">${moodOf(p).f} ${moodOf(p).t}</div>
+      <div class="stats">
+        <div class="stat"><span class="ic">🍖</span><span style="width:54px">${T("hunger")}</span><span class="bar h"><i id="barH" style="width:${p.hunger}%"></i></span></div>
+        <div class="stat"><span class="ic">💖</span><span style="width:54px">${T("happy")}</span><span class="bar j"><i id="barJ" style="width:${p.happy}%"></i></span></div>
+        <div class="stat"><span class="ic">🫧</span><span style="width:54px">${T("clean")}</span><span class="bar c"><i id="barC" style="width:${p.clean}%"></i></span></div>
+      </div>
+      <div class="care">
+        <button class="btn b-orange" data-a="care:feed"><span class="e">🍖</span>${T("feed")}</button>
+        <button class="btn b-pink" data-a="care:play"><span class="e">🎾</span>${T("play")}</button>
+        <button class="btn b-blue" data-a="care:bath"><span class="e">🛁</span>${T("bath")}</button>
+        <button class="btn b-purple" data-a="care:love"><span class="e">❤️</span>${T("love")}</button>
       </div>`;
+    const scene=$("#scene");
+    scene.addEventListener("click",(e)=>{
+      const r=scene.getBoundingClientRect();
+      let x=((e.clientX-r.left)/r.width)*100, y=((e.clientY-r.top)/r.height)*100;
+      x=Math.max(12,Math.min(88,x)); y=Math.max(28,Math.min(92,y));
+      petFlip = x < petPos.x; petPos={x,y};
+      const aEl=$("#petActor"); aEl.style.left=x+"%"; aEl.style.top=y+"%";
+      aEl.style.transform=`translate(-50%,-100%) scaleX(${petFlip?-1:1})`;
+      Audio2.sfx("pop");
+    });
     setActiveScreen("home");
   }
+  function updateWorldStats(){ const p=activePet(); if(!p)return;
+    const bH=$("#barH"),bJ=$("#barJ"),bC=$("#barC"),ml=$("#moodLine");
+    if(bH)bH.style.width=p.hunger+"%"; if(bJ)bJ.style.width=p.happy+"%"; if(bC)bC.style.width=p.clean+"%";
+    if(ml){ const m=moodOf(p); ml.textContent=m.f+" "+m.t; } const c=$("#coins"); if(c)c.textContent=S.coins; }
   function doCare(kind){
-    const p=activePet(); if(!p) return;
-    let key,amt,emoji,word;
-    if(kind==="feed"){key="hunger";emoji="🍖";word=T("yum");}
-    else if(kind==="play"){key="happy";emoji="🎾";word=T("fun");}
-    else if(kind==="wash"){key="clean";emoji="✨";word=T("sparkly");}
-    else {key="happy";emoji="💖";word=T("love_you");}
-    if(p[key]>=100 && kind!=="love"){ toast(T("full")); floatEmoji("🥰"); return; }
-    p[key]=clamp(p[key] + (kind==="love"?12:26));
-    if(kind==="love") p.clean=clamp(p.clean+2);
-    p.lastUpdate=now();
-    S.coins += 1; // small reward for caring, so kids are never stuck
-    floatEmoji(emoji); toast(word);
-    save(); renderHome(); syncTop();
+    const p=activePet(); if(!p)return;
+    let key,emoji,word,sfx;
+    if(kind==="feed"){key="hunger";emoji="🍖";word=T("yum");sfx="feed";}
+    else if(kind==="play"){key="happy";emoji="🎾";word=T("fun");sfx="play";}
+    else if(kind==="bath"){key="clean";emoji="🫧";word=T("sparkly");sfx="bath";}
+    else {key="happy";emoji="💖";word=T("love_you");sfx="love";}
+    if(p[key]>=100 && kind!=="love"){ toast(T("full")); floatAt($("#petActor"),"🥰"); Audio2.sfx("pop"); return; }
+    p[key]=clamp(p[key]+(kind==="love"?12:26)); if(kind==="love")p.clean=clamp(p.clean+2);
+    p.lastUpdate=now(); S.coins+=1;
+    floatAt($("#petActor"),emoji); toast(word); Audio2.sfx(sfx);
+    save(); updateWorldStats();
   }
 
-  /* ---------------- MY PETS ---------------- */
+  /* ---------------- MY ANIMALS ---------------- */
   function renderPets(){
     screen.innerHTML=`<h2 class="head">${T("my_pets")}</h2><div class="sub">${T("tap_care")}</div>
-      <div class="grid">
-        ${S.pets.map(p=>{
-          const avg=Math.round((p.hunger+p.happy+p.clean)/3);
-          return `<div class="card ${p.id===S.activeId?'sel':''}" data-a="setactive:${p.id}">
-            ${p.id===S.activeId?`<span class="tag">${T("active")}</span>`:""}
-            <div class="big">${p.sp}</div><div class="nm">${p.name}</div>
-            <div class="mini-stat">${moodOf(p).f} ${avg}%</div></div>`;
-        }).join("")}
-      </div>`;
+      <div class="grid">${S.pets.map(p=>{ const a=Math.round((p.hunger+p.happy+p.clean)/3);
+        return `<div class="card ${p.id===S.activeId?'sel':''}" data-a="setactive:${p.id}">
+          ${p.id===S.activeId?`<span class="tag">${T("active")}</span>`:""}
+          <div class="big">${p.sp}</div><div class="nm">${p.name}</div><div class="mini-stat">${moodOf(p).f} ${a}%</div></div>`;
+      }).join("")}</div>`;
     setActiveScreen("pets");
   }
 
   /* ---------------- ADOPT ---------------- */
+  let _adoptCache=null;
+  function adoptChoices(){ if(!_adoptCache)_adoptCache=shuffle(SPECIES.slice()).slice(0,6); return _adoptCache; }
   function renderAdopt(){
-    const choices = adoptChoices();
-    screen.innerHTML=`<h2 class="head">${T("adopt_center")} 🏡</h2>
-      <div class="sub">🪙 ${PRICES.adopt} ${T("coins_word")}</div>
-      <div class="grid">
-        ${choices.map(sp=>`<div class="card" data-a="adopt:${sp}">
-          <div class="big">${sp}</div>
-          <button class="btn b-mint" style="font-size:13px;padding:8px 4px;margin-top:6px;width:100%">${T("adopt_this")}</button>
-        </div>`).join("")}
-      </div>`;
+    screen.innerHTML=`<h2 class="head">${T("adopt_center")} 🏡</h2><div class="sub">🪙 ${PRICES.adopt} ${T("coins_word")}</div>
+      <div class="grid">${adoptChoices().map(sp=>`<div class="card" data-a="adopt:${sp}"><div class="big">${sp}</div>
+        <button class="btn b-mint" style="font-size:13px;padding:8px 4px;margin-top:6px;width:100%">${T("adopt_this")}</button></div>`).join("")}</div>`;
     setActiveScreen("adopt");
   }
-  let _adoptCache=null;
-  function adoptChoices(){ if(!_adoptCache) _adoptCache=shuffle(SPECIES.slice()).slice(0,6); return _adoptCache; }
-  function doAdopt(sp){
-    if(S.coins<PRICES.adopt){ toast(T("need_coins")); return; }
-    S.coins-=PRICES.adopt;
-    const p=makePet(sp); S.pets.push(p); S.activeId=p.id;
-    _adoptCache=null;
-    toast(T("adopted")); floatEmoji("🎉");
-    save(); syncTop();
-    S.screen="home"; renderHome();
-  }
+  function doAdopt(sp){ if(S.coins<PRICES.adopt){ toast(T("need_coins")); return; }
+    S.coins-=PRICES.adopt; const p=makePet(sp); S.pets.push(p); S.activeId=p.id; _adoptCache=null;
+    petPos={x:50,y:66}; toast(T("adopted")); floatAt(screen,"🎉"); Audio2.sfx("adopt");
+    save(); syncTop(); S.screen="home"; renderHome(); }
 
   /* ---------------- DRESS UP ---------------- */
   function renderDress(){
     const p=activePet(); if(!p){ S.screen="adopt"; return renderAdopt(); }
-    const slot=(list,slotKey,price)=>`
-      <div class="slotrow"><h3>${slotKey==='hat'?T("hats"):slotKey==='face'?T("face"):T("neck")}</h3>
-      <div class="items">
-        <div class="item ${!p.outfit[slotKey]?'on':''}" data-a="wear:${slotKey}:none"><span class="none">${T("none")}</span></div>
-        ${list.map(e=>`<div class="item ${p.outfit[slotKey]===e?'on':''}" data-a="wear:${slotKey}:${e}">${e}<span class="cost">🪙${price}</span></div>`).join("")}
+    const o=p.outfit;
+    const slot=(list,k,price,lab)=>`<div class="slotrow"><h3>${lab}</h3><div class="items">
+        <div class="item ${!o[k]?'on':''}" data-a="wear:${k}:none"><span class="none">${T("none")}</span></div>
+        ${list.map(e=>`<div class="item ${o[k]===e?'on':''}" data-a="wear:${k}:${e}">${e}<span class="cost">🪙${price}</span></div>`).join("")}
       </div></div>`;
     screen.innerHTML=`<h2 class="head">${T("dressup")} 👗</h2>
-      <div class="plate">${petStageHTML(p,110)}<div class="petname">${p.name}</div></div>
-      <div class="slots">
-        ${slot(HATS,"hat",PRICES.hat)}
-        ${slot(FACES,"face",PRICES.face)}
-        ${slot(NECKS,"neck",PRICES.neck)}
-      </div>`;
+      <div class="plate"><div class="stage2"><div class="pet">${p.sp}
+        ${o.hat?`<span class="acc" style="top:-24px;left:50%;transform:translateX(-50%);font-size:40px">${o.hat}</span>`:""}
+        ${o.face?`<span class="acc" style="top:18px;left:50%;transform:translateX(-50%);font-size:32px">${o.face}</span>`:""}
+        ${o.neck?`<span class="acc" style="bottom:-4px;left:50%;transform:translateX(-50%);font-size:30px">${o.neck}</span>`:""}
+      </div></div><div class="petname">${p.name}</div></div>
+      <div class="slots">${slot(HATS,"hat",PRICES.hat,T("hats"))}${slot(FACES,"face",PRICES.face,T("face"))}${slot(NECKS,"neck",PRICES.neck,T("neck"))}</div>`;
     setActiveScreen("dress");
   }
-  function doWear(slotKey,val){
-    const p=activePet(); if(!p) return;
-    if(val==="none"){ p.outfit[slotKey]=null; save(); renderDress(); return; }
-    if(p.outfit[slotKey]===val){ p.outfit[slotKey]=null; save(); renderDress(); return; }
-    const price = slotKey==="hat"?PRICES.hat:slotKey==="face"?PRICES.face:PRICES.neck;
-    // owned items are remembered per pet-slot-emoji so re-wearing is free
-    S._owned = S._owned || {};
-    const oid = slotKey+":"+val;
-    if(!S._owned[oid]){
-      if(S.coins<price){ toast(T("need_coins")); return; }
-      S.coins-=price; S._owned[oid]=true; syncTop();
-    }
-    p.outfit[slotKey]=val; toast(T("worn")); floatEmoji("✨");
-    save(); renderDress();
+  function doWear(k,val){
+    const p=activePet(); if(!p)return;
+    if(val==="none"||p.outfit[k]===val){ p.outfit[k]=null; Audio2.sfx("pop"); save(); renderDress(); return; }
+    const price=k==="hat"?PRICES.hat:k==="face"?PRICES.face:PRICES.neck;
+    S._owned=S._owned||{}; const oid=k+":"+val;
+    if(!S._owned[oid]){ if(S.coins<price){ toast(T("need_coins")); return; } S.coins-=price; S._owned[oid]=true; syncTop(); }
+    p.outfit[k]=val; toast(T("worn")); Audio2.sfx("gift"); save(); renderDress();
   }
 
-  /* ---------------- FASHION SHOW ---------------- */
+  /* ---------------- POP STAR SHOW ---------------- */
   function renderShow(){
     const p=activePet(); if(!p){ S.screen="adopt"; return renderAdopt(); }
-    screen.innerHTML=`<h2 class="head">${T("fashion")} 🌟</h2>
-      <div class="runway"><div class="spot"></div>
-        ${petStageHTML(p,96)}
-        <div class="petname" style="color:#fff">${p.name}</div>
-      </div>
+    const o=p.outfit;
+    screen.innerHTML=`<h2 class="head">${T("fashion")} 🎤</h2>
+      <div class="runway"><div class="spot"></div><div class="stage2"><div class="pet" style="color:#fff">${p.sp}
+        ${o.hat?`<span class="acc" style="top:-24px;left:50%;transform:translateX(-50%);font-size:40px">${o.hat}</span>`:""}
+        ${o.face?`<span class="acc" style="top:18px;left:50%;transform:translateX(-50%);font-size:32px">${o.face}</span>`:""}
+      </div></div><div class="petname" style="color:#fff">${p.name}</div></div>
       <button class="btn b-pink btn-lg" style="margin-top:14px" data-a="show:go">${T("enter_show")}</button>`;
     setActiveScreen("show");
   }
   function doShow(){
-    const p=activePet(); if(!p) return;
+    const p=activePet(); if(!p)return;
     const pieces=(p.outfit.hat?1:0)+(p.outfit.face?1:0)+(p.outfit.neck?1:0);
-    const myScore = Math.min(100, Math.round(45 + pieces*12 + p.happy/6 + p.clean/6 + Math.random()*12));
-    // NPC contestants — "see the others"
-    const others = shuffle(SPECIES.filter(s=>s!==p.sp)).slice(0,2).map(sp=>({
-      sp, hat:HATS[Math.floor(Math.random()*HATS.length)],
-      score: Math.round(45+Math.random()*45)
-    }));
-    const all=[{me:true,sp:p.sp,name:p.name,score:myScore,outfit:p.outfit},
-      ...others.map(o=>({me:false,sp:o.sp,name:"⭐",score:o.score,outfit:{hat:o.hat,face:null,neck:null}}))]
-      .sort((a,b)=>b.score-a.score);
-    const place = all.findIndex(x=>x.me)+1;
-    const medals=["🥇","🥈","🥉"];
-    const won = place===1?30:place===2?18:12;
-    S.coins+=won; if(place===1) S.trophies++;
-    save(); syncTop();
+    const my=Math.min(100,Math.round(45+pieces*12+p.happy/6+p.clean/6+Math.random()*12));
+    const others=shuffle(SPECIES.filter(s=>s!==p.sp)).slice(0,2).map(sp=>({sp,hat:HATS[Math.floor(Math.random()*HATS.length)],score:Math.round(45+Math.random()*45)}));
+    const all=[{me:true,sp:p.sp,name:p.name,score:my,hat:p.outfit.hat},...others.map(o=>({me:false,sp:o.sp,name:"⭐",score:o.score,hat:o.hat}))].sort((a,b)=>b.score-a.score);
+    const place=all.findIndex(x=>x.me)+1, medals=["🥇","🥈","🥉"], won=place===1?30:place===2?18:12;
+    S.coins+=won; if(place===1)S.trophies++; save(); syncTop(); Audio2.sfx("show");
     screen.innerHTML=`<h2 class="head">${place===1?T("winner")+" 🎉":T("fashion")}</h2>
-      <div class="runway"><div class="spot"></div>
-        <div class="row-show">
-          ${all.map((x,i)=>`<div class="contestant">
-            <div style="font-size:${x.me?60:46}px;position:relative">
-              ${x.sp}${x.outfit.hat?`<span style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:26px">${x.outfit.hat}</span>`:""}
-            </div>
-            <div class="medal">${medals[i]||""}</div>
-            <div class="scoreline">${x.me?T("you"):"⭐"} · ${x.score}</div>
-          </div>`).join("")}
-        </div>
-        <div style="margin-top:12px;font-size:20px;font-weight:900;color:#fff">${T("you_won")} 🪙${won} ${T("coins_word")}!</div>
-      </div>
-      <div class="rowbtns">
-        <button class="btn b-mint" data-a="show:again">${T("again")}</button>
-        <button class="btn b-purple" data-a="nav:home">${T("home")}</button>
-      </div>`;
-    floatConfetti();
+      <div class="runway"><div class="spot"></div><div class="row-show">
+        ${all.map((x,i)=>`<div class="contestant"><div style="font-size:${x.me?58:46}px;position:relative">${x.sp}
+          ${x.hat?`<span style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:26px">${x.hat}</span>`:""}</div>
+          <div class="medal">${medals[i]||""}</div><div class="scoreline">${x.me?T("you"):"⭐"} · ${x.score}</div></div>`).join("")}
+      </div><div style="margin-top:12px;font-size:20px;font-weight:900;color:#fff">${T("you_won")} 🪙${won} ${T("coins_word")}!</div></div>
+      <div class="rowbtns"><button class="btn b-mint" data-a="show:again">${T("again")}</button>
+        <button class="btn b-purple" data-a="nav:home">${T("home")}</button></div>`;
+    ["🎉","✨","💖","🌟","🎊"].forEach((e,i)=>setTimeout(()=>floatAt(screen,e),i*120));
   }
-  function floatConfetti(){ ["🎉","✨","💖","🌟","🎊"].forEach((e,i)=>setTimeout(()=>floatEmoji(e),i*120)); }
 
   /* ---------------- GIFTS ---------------- */
   let giftSel={friend:0,gift:0};
   function renderGifts(){
-    screen.innerHTML=`<h2 class="head">${T("gifts_t")}</h2>
-      <div class="sub">${T("pick_friend")}</div>
-      <div>${FRIENDS.map((f,i)=>`<div class="friend ${giftSel.friend===i?'sel':''}" data-a="gf:${i}" style="${giftSel.friend===i?'outline:4px solid var(--accent);outline-offset:-2px':''}">
-        <span class="fav">${f.av}</span><span class="fn">${f.nm}</span><span class="hearts">💖</span></div>`).join("")}</div>
+    screen.innerHTML=`<h2 class="head">${T("gifts_t")}</h2><div class="sub">${T("pick_friend")}</div>
+      <div>${FRIENDS.map((f,i)=>`<div class="friend ${giftSel.friend===i?'sel':''}" data-a="gf:${i}">
+        <span class="fav">${f.av}</span><span class="fn">${f.nm}</span><span>💖</span></div>`).join("")}</div>
       <div class="sub" style="margin-top:8px">${T("pick_gift")}</div>
-      <div class="items" style="flex-wrap:wrap;justify-content:center">
-        ${GIFTS.map((g,i)=>`<div class="item ${giftSel.gift===i?'on':''}" data-a="gg:${i}">${g}</div>`).join("")}
-      </div>
+      <div class="items" style="flex-wrap:wrap;justify-content:center">${GIFTS.map((g,i)=>`<div class="item ${giftSel.gift===i?'on':''}" data-a="gg:${i}">${g}</div>`).join("")}</div>
       <button class="btn b-pink btn-lg" style="margin-top:14px" data-a="gift:send">${T("send")}</button>`;
     setActiveScreen("gifts");
   }
-  function doSendGift(){
-    const f=FRIENDS[giftSel.friend], g=GIFTS[giftSel.gift];
-    S.giftsSent++; const back=3+Math.floor(Math.random()*4); S.coins+=back;
-    save(); syncTop();
-    floatEmoji(g); floatEmoji("💖");
-    toast(`${f.av} ${f.nm}: ${T("sent")} (+🪙${back})`);
-  }
+  function doSendGift(){ const f=FRIENDS[giftSel.friend], g=GIFTS[giftSel.gift];
+    S.giftsSent++; const back=3+Math.floor(Math.random()*4); S.coins+=back; save(); syncTop();
+    floatAt(screen,g); floatAt(screen,"💖"); Audio2.sfx("gift"); toast(`${f.av} ${f.nm}: ${T("sent")} (+🪙${back})`); }
 
   /* ---------------- nav ---------------- */
-  const NAVS=[["home","🏠","home"],["pets","🐾","pets"],["adopt","🏡","adopt"],["dress","👗","dress"],["show","🌟","show"],["gifts","🎁","gifts"]];
-  function buildNav(){
-    nav.innerHTML=NAVS.map(([id,e,lab])=>`<button data-a="nav:${id}" data-nav="${id}"><span class="e">${e}</span>${T(lab)}</button>`).join("");
-    nav.classList.remove("hidden");
-  }
-  function setActiveScreen(id){
-    S.screen=id;
-    nav.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.nav===id));
-  }
-  function go(id){
-    S.screen=id; save();
+  const NAVS=[["home","🌍","home"],["pets","🐾","pets"],["adopt","🏡","adopt"],["dress","👗","dress"],["show","🎤","show"],["gifts","🎁","gifts"]];
+  function buildNav(){ nav.innerHTML=NAVS.map(([id,e,lab])=>`<button data-a="nav:${id}" data-nav="${id}"><span class="e">${e}</span>${T(lab)}</button>`).join("");
+    nav.classList.remove("hidden"); }
+  function setActiveScreen(id){ S.screen=id; nav.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.nav===id)); }
+  function go(id){ S.screen=id; save();
     if(id==="home")renderHome(); else if(id==="pets")renderPets(); else if(id==="adopt"){_adoptCache=null;renderAdopt();}
-    else if(id==="dress")renderDress(); else if(id==="show")renderShow(); else if(id==="gifts")renderGifts();
-  }
+    else if(id==="dress")renderDress(); else if(id==="show")renderShow(); else if(id==="gifts")renderGifts(); }
 
-  /* ---------------- start game ---------------- */
-  function startGame(){
-    S.started=true; S.name=ob.name.trim()||"⭐"; S.avatar=ob.avatar; S.lang=S.lang; S.colorIx=ob.colorIx;
-    const p=makePet(ob.species); S.pets=[p]; S.activeId=p.id;
-    S.coins=80;
-    applyTheme(); save();
-    buildNav(); syncTop(); go("home");
-  }
+  function startGame(){ S.started=true; S.name=(ob.name||"").trim()||"⭐"; S.avatar=ob.avatar; S.colorIx=ob.colorIx;
+    const p=makePet(ob.species); S.pets=[p]; S.activeId=p.id; S.coins=80; S.env="home"; petPos={x:50,y:66};
+    applyTheme(); save(); if(!S.muted) Audio2.startMusic();
+    buildNav(); syncTop(); go("home"); }
 
-  /* ---------------- click router ---------------- */
+  /* ---------------- router ---------------- */
   app.addEventListener("click",(ev)=>{
     const t=ev.target.closest("[data-a]"); if(!t) return;
-    const a=t.getAttribute("data-a"), [k,v,v2]=a.split(":");
-    if(k==="lang"){ S.lang=v; ob.step=1; save(); renderOnboard(); return; }
+    const parts=t.getAttribute("data-a").split(":"); const k=parts[0], v=parts[1], v2=parts[2];
+    Audio2.ensure(); // first user gesture unlocks audio
+    if(k==="lang"){ S.lang=v; ob.step=1; save(); if(!S.muted)Audio2.startMusic(); renderOnboard(); return; }
     if(k==="av"){ ob.avatar=AVATARS[+v]; renderOnboard(); return; }
     if(k==="col"){ ob.colorIx=+v; renderOnboard(); return; }
-    if(k==="ob"){
-      if(v==="2"){ ob.name=($("#nameInput")&&$("#nameInput").value)||ob.name; ob.step=2; }
-      else if(v==="3"){ ob.step=3; }
-      renderOnboard(); return;
-    }
+    if(k==="ob"){ if(v==="2"){ ob.name=($("#nameInput")&&$("#nameInput").value)||ob.name; ob.step=2; } else if(v==="3"){ ob.step=3; } renderOnboard(); return; }
     if(k==="first"){ ob.species=v; startGame(); return; }
+    if(k==="env"){ S.env=v; petPos={x:50,y:66}; petFlip=false; save(); renderHome(); return; }
     if(k==="care"){ doCare(v); return; }
-    if(k==="setactive"){ S.activeId=+v; save(); go("home"); return; }
+    if(k==="setactive"){ S.activeId=+v; petPos={x:50,y:66}; save(); go("home"); return; }
     if(k==="adopt"){ doAdopt(v); return; }
     if(k==="wear"){ doWear(v,v2); return; }
     if(k==="show"){ if(v==="go"||v==="again") doShow(); return; }
@@ -615,23 +592,15 @@
     if(k==="gg"){ giftSel.gift=+v; renderGifts(); return; }
     if(k==="gift"){ doSendGift(); return; }
     if(k==="nav"){ go(v); return; }
-    if(k==="lng"){ /* reserved */ }
   });
-
-  $("#langBtn").addEventListener("click",()=>{
-    S.lang = S.lang==="en"?"tr":"en"; save(); syncTop(); buildNav(); go(S.screen||"home");
-  });
+  $("#langBtn").addEventListener("click",()=>{ S.lang=S.lang==="en"?"tr":"en"; save(); syncTop(); buildNav(); go(S.screen||"home"); });
+  $("#soundBtn").addEventListener("click",()=>{ S.muted=!S.muted; Audio2.ensure(); Audio2.setMuted(S.muted); save(); syncTop(); });
 
   /* ---------------- boot ---------------- */
-  load();
-  applyTheme();
+  load(); applyTheme();
   if(!S.started){ renderOnboard(); }
-  else {
-    // real-time care: catch up on time passed while away
-    const t=now(); S.pets.forEach(p=>decayPet(p,t)); save();
-    buildNav(); syncTop(); go(S.screen||"home");
-  }
-  setInterval(tick, 30000); // gentle live decay while playing
+  else { const t=now(); S.pets.forEach(p=>decayPet(p,t)); save(); buildNav(); syncTop(); go(S.screen||"home"); }
+  setInterval(tickDecay,30000);
 })();
 </script>
 </body>
