@@ -21,7 +21,10 @@ export default function Roadmap() {
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {t.roadmap.phases.map((p) => (
             <div key={p.tag} className="rounded-chunk bg-white p-6 shadow-pop-sm transition-transform hover:-translate-y-1">
-              <span className="text-xs font-extrabold uppercase tracking-wide text-mute">{p.tag}</span>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-xs font-extrabold uppercase tracking-wide text-mute">{p.tag}</span>
+                <span className="rounded-full bg-sea/10 px-2.5 py-1 text-[11px] font-extrabold text-sea">{p.date}</span>
+              </div>
               <h3 className="mt-1 font-display text-xl font-bold text-navy">{p.title}</h3>
               <span className={`mt-3 inline-block rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-wide ${badge[p.status]}`}>
                 {label[p.status]}

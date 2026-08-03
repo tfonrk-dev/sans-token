@@ -57,10 +57,10 @@ export const COPY = {
       title: "Nereye gidiyoruz",
       labels: { done: "TAMAM", active: "AKTİF", next: "YAKINDA" },
       phases: [
-        { tag: "Faz 01", title: "Oyun Canlı", status: "done", items: ["Telegram mini uygulama canlı", "Sunucu-otoriter motor", "10 seviye + skinler", "Reklam, yükseltme, referans, lider tablosu"] },
-        { tag: "Faz 02", title: "TON & Ön Satış", status: "active", items: ["SANS jetton TON'da", "TON Connect cüzdan + ödeme", "1. Faz ön satış", "Monetag reklam geliri"] },
-        { tag: "Faz 03", title: "Mainnet & Büyüme", status: "next", items: ["Mainnet jetton (sabit arz)", "TON'da DEX likidite", "Güvenlik denetimi", "Reklam ortaklıkları"] },
-        { tag: "Faz 04", title: "Ölçeklenme", status: "next", items: ["Zincir üstü ödül / airdrop", "Stake & geri-alım otomasyonu", "CEX listeleri", "DAO yönetişimi"] },
+        { tag: "Faz 01", date: "2026 3. Çeyrek", title: "Oyun Canlı", status: "done", items: ["Telegram mini uygulama canlı", "Sunucu-otoriter motor", "10 seviye + skinler", "Reklam, yükseltme, referans, lider tablosu"] },
+        { tag: "Faz 02", date: "2026 4. Çeyrek", title: "TON & Ön Satış", status: "active", items: ["SANS jetton TON'da", "TON Connect cüzdan + ödeme", "1. Faz ön satış", "Monetag reklam geliri"] },
+        { tag: "Faz 03", date: "2027 1. Çeyrek", title: "Mainnet & Büyüme", status: "next", items: ["Mainnet jetton (sabit arz)", "TON'da DEX likidite", "Güvenlik denetimi (audit)", "Reklam ortaklıkları"] },
+        { tag: "Faz 04", date: "2027 2. Çeyrek", title: "Ölçeklenme", status: "next", items: ["Zincir üstü ödül / airdrop", "Stake & geri-alım otomasyonu", "CEX listeleri", "DAO yönetişimi"] },
       ],
     },
     presale: {
@@ -149,10 +149,10 @@ export const COPY = {
       title: "Where we're headed",
       labels: { done: "DONE", active: "ACTIVE", next: "SOON" },
       phases: [
-        { tag: "Phase 01", title: "Game Live", status: "done", items: ["Telegram mini app live", "Server-authoritative engine", "10 tiers + skins", "Ads, upgrades, referrals, leaderboard"] },
-        { tag: "Phase 02", title: "TON & Presale", status: "active", items: ["SANS jetton on TON", "TON Connect wallet + payments", "Phase-1 presale", "Monetag ad revenue"] },
-        { tag: "Phase 03", title: "Mainnet & Growth", status: "next", items: ["Mainnet jetton (fixed supply)", "DEX liquidity on TON", "Security audit", "Ad partnerships"] },
-        { tag: "Phase 04", title: "Scaling", status: "next", items: ["On-chain rewards / airdrop", "Stake & buyback automation", "CEX listings", "DAO governance"] },
+        { tag: "Phase 01", date: "Q3 2026", title: "Game Live", status: "done", items: ["Telegram mini app live", "Server-authoritative engine", "10 tiers + skins", "Ads, upgrades, referrals, leaderboard"] },
+        { tag: "Phase 02", date: "Q4 2026", title: "TON & Presale", status: "active", items: ["SANS jetton on TON", "TON Connect wallet + payments", "Phase-1 presale", "Monetag ad revenue"] },
+        { tag: "Phase 03", date: "Q1 2027", title: "Mainnet & Growth", status: "next", items: ["Mainnet jetton (fixed supply)", "DEX liquidity on TON", "Security audit", "Ad partnerships"] },
+        { tag: "Phase 04", date: "Q2 2027", title: "Scaling", status: "next", items: ["On-chain rewards / airdrop", "Stake & buyback automation", "CEX listings", "DAO governance"] },
       ],
     },
     presale: {
