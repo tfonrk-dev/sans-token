@@ -10,6 +10,8 @@ export const SITE = {
   playUrl: "https://t.me/sanslicekilisbot?startapp=oyna",
   buyUrl: "https://t.me/sanslicekilisbot?startapp=buy",
   gameUrl: "https://sans-tap-earn.vercel.app",
+  // Listed in TON's official catalog — link drives discovery + upvotes.
+  tonapp: "https://ton.app/games/sans-feed-the-wolf?id=5764",
 
   // Community / socials
   telegram: "https://t.me/sanslicekilisduyuru",

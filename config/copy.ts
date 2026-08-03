@@ -85,6 +85,7 @@ export const COPY = {
         { title: "Canlı & açık", desc: "Şu an Telegram'da oynanabilir — kurulum yok, kayıt yok. Almadan önce dene." },
       ],
       cta: "🐺 Telegram'da bedava oyna",
+      tonapp: "🔼 ton.app'te listelendik — bize oy ver",
     },
     footer: {
       tagline: "Kurdu besle, TON'da $SANS kazan. Şeffaflık ve gerçek etkileşim üzerine kurulu bir Telegram tap-to-earn oyunu.",
@@ -176,6 +177,7 @@ export const COPY = {
         { title: "Live & open", desc: "Playable in Telegram right now — no install, no signup. Try before you buy." },
       ],
       cta: "🐺 Play free in Telegram",
+      tonapp: "🔼 Listed on ton.app — upvote us",
     },
     footer: {
       tagline: "Feed the wolf, earn $SANS on TON. A Telegram tap-to-earn game built on transparency and real engagement.",

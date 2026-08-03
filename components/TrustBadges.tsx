@@ -30,7 +30,7 @@ export default function TrustBadges() {
           })}
         </div>
 
-        <div className="mt-10 flex justify-center">
+        <div className="mt-10 flex flex-col items-center gap-4">
           <a
             href={SITE.playUrl}
             target="_blank"
@@ -38,6 +38,14 @@ export default function TrustBadges() {
             className="inline-flex items-center gap-2 rounded-2xl bg-sun px-8 py-4 text-base font-extrabold text-[#5a3a00] shadow-sun transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
           >
             {t.trust.cta}
+          </a>
+          <a
+            href={SITE.tonapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-2xl bg-white px-6 py-3 text-sm font-extrabold text-navy shadow-pop-sm ring-1 ring-sky-200 transition-transform hover:-translate-y-0.5"
+          >
+            {t.trust.tonapp}
           </a>
         </div>
       </div>
