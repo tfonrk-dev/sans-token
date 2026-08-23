@@ -47,6 +47,18 @@ type Filters = {
   maxFdv: number;
   minTxns24: number;
   limit: number;
+  hideDanger: number; // 1 = güvenlik kontrolünde "tehlikeli" çıkanları gizle
+};
+
+type Safety = {
+  level: "good" | "warn" | "danger" | "unknown";
+  scoreNormalised: number | null; // RugCheck 0-100 (düşük = daha güvenli)
+  risks: { name: string; level: string }[];
+  mintAuthority: boolean | null; // true = geliştirici hâlâ basabiliyor (kötü)
+  freezeAuthority: boolean | null; // true = cüzdanın dondurulabilir (kötü)
+  lpLockedPct: number | null; // kilitli likidite yüzdesi
+  topHolderPct: number | null; // en büyük tek cüzdanın payı
+  checkedAt: number;
 };
 
 const DEFAULTS: Filters = {
@@ -57,7 +69,10 @@ const DEFAULTS: Filters = {
   maxFdv: 3_000_000, // small cap = room to run
   minTxns24: 150, // enough trades that it isn't dead
   limit: 30,
+  hideDanger: 1, // güvenlik kontrolünden "tehlikeli" geçenleri varsayılan olarak gizle
 };
+
+const RUGCHECK = "https://api.rugcheck.xyz/v1";
 
 async function getJson(url: string, timeoutMs = 8000): Promise<any | null> {
   const ctrl = new AbortController();
@@ -97,7 +112,86 @@ function parseFilters(searchParams: URLSearchParams): Filters {
     maxFdv: g("maxFdv"),
     minTxns24: g("minTxns24"),
     limit: Math.min(Math.max(Math.round(g("limit")), 1), 50),
+    hideDanger: g("hideDanger") ? 1 : 0,
   };
+}
+
+// RugCheck.xyz — Solana token güvenlik raporu. Anahtar gerektirmez, ama
+// rate-limit olabilir; hata durumunda "unknown" döner (asla patlamaz).
+async function rugCheck(mint: string): Promise<Safety> {
+  const base: Safety = {
+    level: "unknown",
+    scoreNormalised: null,
+    risks: [],
+    mintAuthority: null,
+    freezeAuthority: null,
+    lpLockedPct: null,
+    topHolderPct: null,
+    checkedAt: Date.now(),
+  };
+  const r = await getJson(`${RUGCHECK}/tokens/${mint}/report`, 9000);
+  if (!r) return base;
+
+  const risks: { name: string; level: string }[] = Array.isArray(r.risks)
+    ? r.risks.map((x: any) => ({
+        name: String(x?.name ?? "risk"),
+        level: String(x?.level ?? "warn"),
+      }))
+    : [];
+
+  const hasDanger = risks.some((x) => x.level === "danger");
+  const hasWarn = risks.some((x) => x.level === "warn");
+
+  // Kritik yetkiler: null'dan farklıysa hâlâ aktif demektir.
+  const mintAuthority =
+    r?.token?.mintAuthority != null ? r.token.mintAuthority !== null : null;
+  const freezeAuthority =
+    r?.token?.freezeAuthority != null ? r.token.freezeAuthority !== null : null;
+
+  // Kilitli likidite yüzdesi (varsa).
+  let lpLockedPct: number | null = null;
+  const lpNum = num(r?.markets?.[0]?.lp?.lpLockedPct, NaN);
+  if (Number.isFinite(lpNum)) lpLockedPct = Math.round(lpNum);
+
+  // En büyük tek holder payı.
+  let topHolderPct: number | null = null;
+  const th = r?.topHolders;
+  if (Array.isArray(th) && th.length > 0) {
+    const p = num(th[0]?.pct, NaN);
+    if (Number.isFinite(p)) topHolderPct = Math.round(p);
+  }
+
+  // Ham RugCheck yetki bilgisini de bariz riske çevir.
+  const derivedDanger =
+    mintAuthority === true || freezeAuthority === true || hasDanger;
+
+  return {
+    level: derivedDanger ? "danger" : hasWarn ? "warn" : "good",
+    scoreNormalised: Number.isFinite(num(r?.score_normalised, NaN))
+      ? Math.round(num(r.score_normalised))
+      : null,
+    risks: risks.slice(0, 6),
+    mintAuthority,
+    freezeAuthority,
+    lpLockedPct,
+    topHolderPct,
+    checkedAt: Date.now(),
+  };
+}
+
+// Aynı anda en fazla `size` istek — RugCheck'i boğmadan hepsini kontrol et.
+async function inBatches<T, R>(
+  items: T[],
+  size: number,
+  fn: (item: T) => Promise<R>
+): Promise<R[]> {
+  const out: R[] = [];
+  for (let i = 0; i < items.length; i += size) {
+    const batch = items.slice(i, i + size);
+    const res = await Promise.all(batch.map(fn));
+    out.push(...res);
+  }
+  return out;
 }
 
 // Gather candidate Solana token addresses from the trending / boost feeds.
@@ -264,20 +358,39 @@ export async function GET(req: Request) {
       imageUrl: p.info?.imageUrl ?? null,
       score: score(p),
       flags: riskFlags(p, f),
+      safety: null as Safety | null,
     }))
-    .sort((a, b) => b.score - a.score)
-    .slice(0, f.limit);
+    .sort((a, b) => b.score - a.score);
+
+  // En iyi adayları güvenlik kontrolünden geçir (limitin biraz fazlasını al,
+  // tehlikeliler elenince yine de yeterli sayı kalsın).
+  const pool = ranked.slice(0, Math.min(ranked.length, f.limit + 15));
+  const safeties = await inBatches(pool, 5, (c) => rugCheck(c.address));
+  pool.forEach((c, i) => {
+    c.safety = safeties[i];
+  });
+
+  let withSafety = pool;
+  if (f.hideDanger) {
+    withSafety = pool.filter((c) => c.safety?.level !== "danger");
+  }
+  const finalList = withSafety.slice(0, f.limit);
+
+  const dangerFiltered = f.hideDanger
+    ? pool.filter((c) => c.safety?.level === "danger").length
+    : 0;
 
   return NextResponse.json({
     ok: true,
-    candidates: ranked,
+    candidates: finalList,
     meta: {
       scanned: unique.length,
       passed: passed.length,
-      returned: ranked.length,
+      returned: finalList.length,
+      dangerFiltered,
       filters: f,
       generatedAt: Date.now(),
-      source: "dexscreener.com",
+      source: "dexscreener.com + rugcheck.xyz",
     },
   });
 }

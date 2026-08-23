@@ -11,6 +11,17 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 // tespit edemez. Bu bir ELEME aracı — "spray & pray" için aday listesi çıkarır.
 // ---------------------------------------------------------------------------
 
+type Safety = {
+  level: "good" | "warn" | "danger" | "unknown";
+  scoreNormalised: number | null;
+  risks: { name: string; level: string }[];
+  mintAuthority: boolean | null;
+  freezeAuthority: boolean | null;
+  lpLockedPct: number | null;
+  topHolderPct: number | null;
+  checkedAt: number;
+};
+
 type Candidate = {
   name: string;
   symbol: string;
@@ -29,6 +40,7 @@ type Candidate = {
   imageUrl: string | null;
   score: number;
   flags: string[];
+  safety: Safety | null;
 };
 
 type ApiResponse = {
@@ -39,6 +51,7 @@ type ApiResponse = {
     scanned: number;
     passed?: number;
     returned?: number;
+    dangerFiltered?: number;
     filters: Record<string, number>;
     generatedAt: number;
     source?: string;
@@ -46,12 +59,12 @@ type ApiResponse = {
 };
 
 const PRESETS = {
-  denge: { minLiq: 5000, maxLiq: 400000, minVol24: 20000, maxAgeDays: 14, maxFdv: 3000000, minTxns24: 150, limit: 30 },
-  vahsi: { minLiq: 2000, maxLiq: 150000, minVol24: 10000, maxAgeDays: 5, maxFdv: 1000000, minTxns24: 80, limit: 30 },
-  guvenli: { minLiq: 25000, maxLiq: 800000, minVol24: 80000, maxAgeDays: 21, maxFdv: 8000000, minTxns24: 400, limit: 30 },
+  denge: { minLiq: 5000, maxLiq: 400000, minVol24: 20000, maxAgeDays: 14, maxFdv: 3000000, minTxns24: 150, limit: 30, hideDanger: 1 },
+  vahsi: { minLiq: 2000, maxLiq: 150000, minVol24: 10000, maxAgeDays: 5, maxFdv: 1000000, minTxns24: 80, limit: 30, hideDanger: 1 },
+  guvenli: { minLiq: 25000, maxLiq: 800000, minVol24: 80000, maxAgeDays: 21, maxFdv: 8000000, minTxns24: 400, limit: 30, hideDanger: 1 },
 } as const;
 
-type FilterState = (typeof PRESETS)[keyof typeof PRESETS];
+type FilterState = { [K in keyof (typeof PRESETS)["denge"]]: number };
 
 const usd = (n: number) =>
   n >= 1_000_000
@@ -67,6 +80,43 @@ function pct(n: number) {
   const c = n > 0 ? "text-leaf-dark" : n < 0 ? "text-coral-dark" : "text-mute";
   const sign = n > 0 ? "+" : "";
   return <span className={c}>{sign}{n.toFixed(1)}%</span>;
+}
+
+function SafetyCell({ s }: { s: Safety | null }) {
+  if (!s || s.level === "unknown") {
+    return <span className="text-xs text-mute">? kontrol edilemedi</span>;
+  }
+  const meta = {
+    good: { dot: "bg-leaf", label: "✓ Temiz", txt: "text-leaf-dark" },
+    warn: { dot: "bg-sun", label: "⚠ Dikkat", txt: "text-sun-dark" },
+    danger: { dot: "bg-coral", label: "⛔ Tehlikeli", txt: "text-coral-dark" },
+  }[s.level];
+
+  return (
+    <div className="space-y-1">
+      <div className="flex items-center gap-1.5">
+        <span className={`inline-block h-2 w-2 rounded-full ${meta.dot}`} />
+        <span className={`text-xs font-bold ${meta.txt}`}>{meta.label}</span>
+      </div>
+      <ul className="space-y-0.5 text-[11px] leading-tight text-slate">
+        {s.mintAuthority === true && <li className="text-coral-dark">• Mint yetkisi AÇIK (sonsuz basılabilir)</li>}
+        {s.freezeAuthority === true && <li className="text-coral-dark">• Freeze yetkisi AÇIK (cüzdan dondurulabilir)</li>}
+        {s.lpLockedPct != null && (
+          <li className={s.lpLockedPct < 50 ? "text-coral-dark" : "text-leaf-dark"}>
+            • Kilitli likidite: %{s.lpLockedPct}
+          </li>
+        )}
+        {s.topHolderPct != null && (
+          <li className={s.topHolderPct > 20 ? "text-coral-dark" : ""}>
+            • En büyük cüzdan: %{s.topHolderPct}
+          </li>
+        )}
+        {s.risks.slice(0, 2).map((r, i) => (
+          <li key={i} className={r.level === "danger" ? "text-coral-dark" : ""}>• {r.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
 export default function ScreenerPage() {
@@ -185,9 +235,12 @@ export default function ScreenerPage() {
               </li>
             </ol>
             <p className="rounded-lg bg-sky-50 p-2 text-xs text-navy">
-              🔐 Güvenlik: Almadan önce coinin <b>likidite kilidi</b>, <b>kontrat</b>
-              {" "}ve <b>holder dağılımını</b> kontrol et (İncele → DexScreener). Bir
-              cüzdan sana DM'den yazıp "onayla/bağlan" derse dolandırıcıdır — asla
+              🔐 Güvenlik: Tablodaki <b>Güvenlik</b> kolonu her coini otomatik
+              olarak <b>RugCheck</b>'ten geçirir (mint/freeze yetkisi, likidite
+              kilidi, holder yoğunluğu). <b>⛔ Tehlikeli</b> işaretliler varsayılan
+              olarak gizlenir. Yine de <b>? kontrol edilemedi</b> ya da{" "}
+              <b>⚠ Dikkat</b> görürsen almadan önce "İncele" ile kendin doğrula.
+              Bir cüzdan sana DM'den "onayla/bağlan" derse dolandırıcıdır — asla
               seed'ini girme, tanımadığın siteye cüzdan bağlama.
             </p>
           </div>
@@ -233,10 +286,22 @@ export default function ScreenerPage() {
           >
             {loading ? "Taranıyor…" : "🔄 Tekrar Tara"}
           </button>
+          <label className="flex cursor-pointer items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-navy shadow-pop-sm">
+            <input
+              type="checkbox"
+              checked={filters.hideDanger === 1}
+              onChange={(e) => setField("hideDanger", e.target.checked ? 1 : 0)}
+              className="h-4 w-4 accent-coral"
+            />
+            ⛔ Tehlikelileri gizle (RugCheck)
+          </label>
           {data?.meta && (
             <span className="text-sm text-mute">
-              {data.meta.scanned} token tarandı · {data.candidates.length} aday ·
-              yaklaşık bütçe <b className="text-navy">${budget}</b> · kaynak: DexScreener
+              {data.meta.scanned} token tarandı · {data.candidates.length} aday
+              {data.meta.dangerFiltered ? (
+                <> · <b className="text-coral-dark">{data.meta.dangerFiltered} tehlikeli elendi</b></>
+              ) : null}{" "}
+              · yaklaşık bütçe <b className="text-navy">${budget}</b> · kaynak: DexScreener + RugCheck
             </span>
           )}
         </div>
@@ -262,6 +327,7 @@ export default function ScreenerPage() {
                 <th className="px-3 py-3 text-right">24s</th>
                 <th className="px-3 py-3 text-right">Yaş</th>
                 <th className="px-3 py-3 text-right">Skor</th>
+                <th className="px-3 py-3">Güvenlik</th>
                 <th className="px-3 py-3">Uyarılar</th>
                 <th className="px-3 py-3"></th>
               </tr>
@@ -295,6 +361,9 @@ export default function ScreenerPage() {
                     <span className="rounded-full bg-berry/15 px-2 py-1 font-bold text-berry-dark tabular-nums">
                       {c.score}
                     </span>
+                  </td>
+                  <td className="px-3 py-3 min-w-[170px]">
+                    <SafetyCell s={c.safety} />
                   </td>
                   <td className="px-3 py-3">
                     {c.flags.length === 0 ? (
@@ -331,7 +400,7 @@ export default function ScreenerPage() {
               ))}
               {!loading && (data?.candidates.length ?? 0) === 0 && !err && (
                 <tr>
-                  <td colSpan={12} className="px-3 py-10 text-center text-mute">
+                  <td colSpan={13} className="px-3 py-10 text-center text-mute">
                     Filtrelere uyan aday çıkmadı. Filtreleri gevşetip tekrar dene
                     (örn. min hacmi düşür, max yaşı artır).
                   </td>
