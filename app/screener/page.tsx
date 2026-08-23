@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 
 // ---------------------------------------------------------------------------
 // /screener — Solana "1000x adayı" tarayıcı.
@@ -59,9 +59,9 @@ type ApiResponse = {
 };
 
 const PRESETS = {
-  denge: { minLiq: 5000, maxLiq: 400000, minVol24: 20000, maxAgeDays: 14, maxFdv: 3000000, minTxns24: 150, limit: 30, hideDanger: 1 },
-  vahsi: { minLiq: 2000, maxLiq: 150000, minVol24: 10000, maxAgeDays: 5, maxFdv: 1000000, minTxns24: 80, limit: 30, hideDanger: 1 },
-  guvenli: { minLiq: 25000, maxLiq: 800000, minVol24: 80000, maxAgeDays: 21, maxFdv: 8000000, minTxns24: 400, limit: 30, hideDanger: 1 },
+  denge: { minLiq: 5000, maxLiq: 400000, minVol24: 20000, maxAgeDays: 14, maxFdv: 3000000, minTxns24: 150, limit: 30, hideDanger: 1, maxChange24: 400 },
+  vahsi: { minLiq: 2000, maxLiq: 150000, minVol24: 10000, maxAgeDays: 5, maxFdv: 1000000, minTxns24: 80, limit: 30, hideDanger: 1, maxChange24: 800 },
+  guvenli: { minLiq: 25000, maxLiq: 800000, minVol24: 80000, maxAgeDays: 21, maxFdv: 8000000, minTxns24: 400, limit: 30, hideDanger: 1, maxChange24: 200 },
 } as const;
 
 type FilterState = { [K in keyof (typeof PRESETS)["denge"]]: number };
@@ -275,6 +275,7 @@ export default function ScreenerPage() {
           <NumField label="Min hacim 24s $" value={filters.minVol24} onChange={(v) => setField("minVol24", v)} />
           <NumField label="Max yaş (gün)" value={filters.maxAgeDays} onChange={(v) => setField("maxAgeDays", v)} />
           <NumField label="Max FDV $" value={filters.maxFdv} onChange={(v) => setField("maxFdv", v)} />
+          <NumField label="Max 24s pump %" value={filters.maxChange24} onChange={(v) => setField("maxChange24", v)} />
           <NumField label="Kaç coin" value={filters.limit} onChange={(v) => setField("limit", v)} />
         </div>
 
@@ -312,8 +313,20 @@ export default function ScreenerPage() {
           </div>
         )}
 
-        {/* Sonuç tablosu */}
-        <div className="overflow-x-auto rounded-2xl bg-white shadow-pop-sm">
+        {/* Mobil: kart görünümü (tablo telefona sığmadığı için) */}
+        <div className="space-y-3 md:hidden">
+          {data?.candidates.map((c, i) => (
+            <MobileCard key={c.address} c={c} i={i} />
+          ))}
+          {!loading && (data?.candidates.length ?? 0) === 0 && !err && (
+            <div className="rounded-2xl bg-white p-6 text-center text-sm text-mute shadow-pop-sm">
+              Filtrelere uyan aday çıkmadı. Filtreleri gevşetip tekrar dene.
+            </div>
+          )}
+        </div>
+
+        {/* Masaüstü: tam tablo */}
+        <div className="hidden overflow-x-auto rounded-2xl bg-white shadow-pop-sm md:block">
           <table className="w-full min-w-[860px] text-left text-sm">
             <thead className="bg-sky-50 text-xs uppercase tracking-wide text-slate">
               <tr>
@@ -417,6 +430,79 @@ export default function ScreenerPage() {
         </footer>
       </div>
     </main>
+  );
+}
+
+function MobileCard({ c, i }: { c: Candidate; i: number }) {
+  return (
+    <div className="rounded-2xl bg-white p-4 shadow-pop-sm">
+      <div className="flex items-center gap-2">
+        <span className="text-xs font-bold text-mute">#{i + 1}</span>
+        {c.imageUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={c.imageUrl} alt="" className="h-8 w-8 rounded-full" />
+        ) : (
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sky-100 text-sm">🪙</div>
+        )}
+        <div className="min-w-0 flex-1">
+          <div className="font-bold text-navy">{c.symbol}</div>
+          <div className="truncate text-xs text-mute">{c.name}</div>
+        </div>
+        <span className="rounded-full bg-berry/15 px-2 py-1 text-sm font-bold text-berry-dark tabular-nums">
+          {c.score}
+        </span>
+      </div>
+
+      <div className="mt-3 grid grid-cols-3 gap-2 text-sm">
+        <Stat label="Fiyat" value={price(c.priceUsd)} />
+        <Stat label="Likidite" value={usd(c.liquidityUsd)} />
+        <Stat label="FDV" value={c.fdv ? usd(c.fdv) : "-"} />
+        <Stat label="Hacim 24s" value={usd(c.volume24)} />
+        <Stat label="1s" value={pct(c.change1h)} />
+        <Stat label="24s" value={pct(c.change24h)} />
+      </div>
+
+      <div className="mt-3 rounded-lg bg-sky-50 p-2">
+        <div className="mb-1 text-xs font-semibold text-slate">Güvenlik</div>
+        <SafetyCell s={c.safety} />
+      </div>
+
+      {c.flags.length > 0 && (
+        <ul className="mt-2 space-y-0.5">
+          {c.flags.map((f, k) => (
+            <li key={k} className="text-xs text-coral-dark">• {f}</li>
+          ))}
+        </ul>
+      )}
+
+      <div className="mt-3 flex gap-2">
+        <a
+          href={c.dexUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-1 rounded-full bg-white px-3 py-2 text-center text-xs font-semibold text-sea shadow-pop-sm"
+        >
+          İncele ↗
+        </a>
+        <a
+          href={`https://jup.ag/swap/SOL-${c.address}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-1 rounded-full bg-leaf px-3 py-2 text-center text-xs font-bold text-white"
+        >
+          Al (Jupiter) ↗
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: ReactNode }) {
+  return (
+    <div>
+      <div className="text-[11px] text-mute">{label}</div>
+      <div className="font-semibold text-navy tabular-nums">{value}</div>
+    </div>
   );
 }
 

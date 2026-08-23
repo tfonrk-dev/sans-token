@@ -48,6 +48,7 @@ type Filters = {
   minTxns24: number;
   limit: number;
   hideDanger: number; // 1 = güvenlik kontrolünde "tehlikeli" çıkanları gizle
+  maxChange24: number; // 24s değişim bunun üstündeyse "zaten pumplamış" say, ele
 };
 
 type Safety = {
@@ -70,6 +71,7 @@ const DEFAULTS: Filters = {
   minTxns24: 150, // enough trades that it isn't dead
   limit: 30,
   hideDanger: 1, // güvenlik kontrolünden "tehlikeli" geçenleri varsayılan olarak gizle
+  maxChange24: 400, // 24s'te +%400'den fazla yapmışsa "tepe" riski — varsayılan ele
 };
 
 const RUGCHECK = "https://api.rugcheck.xyz/v1";
@@ -113,6 +115,7 @@ function parseFilters(searchParams: URLSearchParams): Filters {
     minTxns24: g("minTxns24"),
     limit: Math.min(Math.max(Math.round(g("limit")), 1), 50),
     hideDanger: g("hideDanger") ? 1 : 0,
+    maxChange24: g("maxChange24"),
   };
 }
 
@@ -273,10 +276,18 @@ function score(p: DexPair): number {
 
   let s = 0;
   s += Math.min(churn, 20) * 4; // hot trading
-  s += Math.min(Math.max(momentum, -50), 300) * 0.4; // recent move (capped)
+  // "Erken" ödülü: saatlik ivme iyi ama 24s zaten parabolik DEĞİLse. Amaç
+  // hareketin başını yakalamak, tepesinden almak değil.
+  const earlyMomentum = chg1 * 0.6 + chg6 * 0.4; // son saatlerdeki taze hareket
+  s += Math.min(Math.max(earlyMomentum, -50), 150) * 0.5;
   s += (buyRatio - 0.5) * 120; // net buying
   s += youth * 40; // freshness
   s += Math.min(liq / 10_000, 15); // a little liquidity is safer to enter/exit
+
+  // TEPEDEN ALMA CEZASI: 24s'te zaten çok yükselmişse skoru kır. +%100 üstü
+  // her yüzde giderek daha çok ceza (parabolikten kaçın).
+  if (chg24 > 100) s -= (chg24 - 100) * 0.25;
+  if (chg24 > 400) s -= (chg24 - 400) * 0.5; // ekstra sert ceza
 
   return Math.round(s);
 }
@@ -295,6 +306,8 @@ function riskFlags(p: DexPair, f: Filters): string[] {
   if (sells > 0 && buys / Math.max(sells, 1) < 0.4)
     flags.push("Satış baskısı yüksek");
   if (chg24 < -40) flags.push("Son 24s sert düşüş");
+  if (chg24 > 300)
+    flags.push("Zaten çok pumplamış — tepeden alma riski");
   if (vol24 > 0 && liq > 0 && vol24 / liq > 25)
     flags.push("Aşırı churn — pump&dump olabilir");
   const noSocials =
@@ -329,13 +342,16 @@ export async function GET(req: Request) {
     const vol24 = num(p.volume?.h24);
     const fdv = num(p.fdv) || num(p.marketCap);
     const txns24 = num(p.txns?.h24?.buys) + num(p.txns?.h24?.sells);
+    const chg24 = num(p.priceChange?.h24);
     return (
       liq >= f.minLiq &&
       liq <= f.maxLiq &&
       vol24 >= f.minVol24 &&
       (fdv === 0 || fdv <= f.maxFdv) &&
       ageDays(p) <= f.maxAgeDays &&
-      txns24 >= f.minTxns24
+      txns24 >= f.minTxns24 &&
+      // Zaten aşırı pumplamışsa (tepe riski) ele. maxChange24 <= 0 = kapalı.
+      (f.maxChange24 <= 0 || chg24 <= f.maxChange24)
     );
   });
 
