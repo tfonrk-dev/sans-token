@@ -165,8 +165,8 @@ export default function ScreenerPage() {
     setFilters((f) => ({ ...f, [k]: v }));
 
   return (
-    <main className="min-h-screen px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl">
+    <main className="min-h-screen w-full max-w-full overflow-x-hidden px-3 py-8 sm:px-6 sm:py-10 lg:px-8">
+      <div className="mx-auto w-full max-w-6xl">
         {/* Başlık */}
         <header className="mb-6">
           <a href="/" className="text-sm text-sea hover:underline">← Ana sayfa</a>
@@ -313,8 +313,8 @@ export default function ScreenerPage() {
           </div>
         )}
 
-        {/* Mobil: kart görünümü (tablo telefona sığmadığı için) */}
-        <div className="space-y-3 md:hidden">
+        {/* Mobil + tablet: kart görünümü (tablo dar ekrana sığmadığı için) */}
+        <div className="space-y-3 lg:hidden">
           {data?.candidates.map((c, i) => (
             <MobileCard key={c.address} c={c} i={i} />
           ))}
@@ -326,7 +326,7 @@ export default function ScreenerPage() {
         </div>
 
         {/* Masaüstü: tam tablo */}
-        <div className="hidden overflow-x-auto rounded-2xl bg-white shadow-pop-sm md:block">
+        <div className="hidden overflow-x-auto rounded-2xl bg-white shadow-pop-sm lg:block">
           <table className="w-full min-w-[860px] text-left text-sm">
             <thead className="bg-sky-50 text-xs uppercase tracking-wide text-slate">
               <tr>
