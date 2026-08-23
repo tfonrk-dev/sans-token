@@ -327,29 +327,28 @@ export default function ScreenerPage() {
 
         {/* Masaüstü: tam tablo */}
         <div className="hidden overflow-x-auto rounded-2xl bg-white shadow-pop-sm lg:block">
-          <table className="w-full min-w-[860px] text-left text-sm">
+          <table className="w-full min-w-[760px] text-left text-sm">
             <thead className="bg-sky-50 text-xs uppercase tracking-wide text-slate">
               <tr>
-                <th className="px-3 py-3">#</th>
-                <th className="px-3 py-3">Token</th>
-                <th className="px-3 py-3 text-right">Fiyat</th>
-                <th className="px-3 py-3 text-right">Likidite</th>
-                <th className="px-3 py-3 text-right">FDV</th>
-                <th className="px-3 py-3 text-right">Hacim 24s</th>
-                <th className="px-3 py-3 text-right">1s</th>
-                <th className="px-3 py-3 text-right">24s</th>
-                <th className="px-3 py-3 text-right">Yaş</th>
-                <th className="px-3 py-3 text-right">Skor</th>
-                <th className="px-3 py-3">Güvenlik</th>
-                <th className="px-3 py-3">Uyarılar</th>
-                <th className="px-3 py-3"></th>
+                <th className="px-2.5 py-3">#</th>
+                <th className="px-2.5 py-3">Token</th>
+                <th className="px-2.5 py-3 text-right">Fiyat</th>
+                <th className="px-2.5 py-3 text-right">Likidite</th>
+                <th className="px-2.5 py-3 text-right">FDV</th>
+                <th className="px-2.5 py-3 text-right">Hacim 24s</th>
+                <th className="px-2.5 py-3 text-right">1s</th>
+                <th className="px-2.5 py-3 text-right">24s</th>
+                <th className="px-2.5 py-3 text-right">Yaş</th>
+                <th className="px-2.5 py-3 text-right">Skor</th>
+                <th className="px-2.5 py-3">Güvenlik & Uyarılar</th>
+                <th className="px-2.5 py-3"></th>
               </tr>
             </thead>
             <tbody>
               {data?.candidates.map((c, i) => (
                 <tr key={c.address} className="border-t border-sky-100 align-top">
-                  <td className="px-3 py-3 text-mute">{i + 1}</td>
-                  <td className="px-3 py-3">
+                  <td className="px-2.5 py-3 text-mute">{i + 1}</td>
+                  <td className="px-2.5 py-3">
                     <div className="flex items-center gap-2">
                       {c.imageUrl ? (
                         // eslint-disable-next-line @next/next/no-img-element
@@ -363,33 +362,31 @@ export default function ScreenerPage() {
                       </div>
                     </div>
                   </td>
-                  <td className="px-3 py-3 text-right tabular-nums text-navy">{price(c.priceUsd)}</td>
-                  <td className="px-3 py-3 text-right tabular-nums text-navy">{usd(c.liquidityUsd)}</td>
-                  <td className="px-3 py-3 text-right tabular-nums text-navy">{c.fdv ? usd(c.fdv) : "-"}</td>
-                  <td className="px-3 py-3 text-right tabular-nums text-navy">{usd(c.volume24)}</td>
-                  <td className="px-3 py-3 text-right tabular-nums">{pct(c.change1h)}</td>
-                  <td className="px-3 py-3 text-right tabular-nums">{pct(c.change24h)}</td>
-                  <td className="px-3 py-3 text-right tabular-nums text-navy">{c.ageDays}g</td>
-                  <td className="px-3 py-3 text-right">
+                  <td className="px-2.5 py-3 text-right tabular-nums text-navy">{price(c.priceUsd)}</td>
+                  <td className="px-2.5 py-3 text-right tabular-nums text-navy">{usd(c.liquidityUsd)}</td>
+                  <td className="px-2.5 py-3 text-right tabular-nums text-navy">{c.fdv ? usd(c.fdv) : "-"}</td>
+                  <td className="px-2.5 py-3 text-right tabular-nums text-navy">{usd(c.volume24)}</td>
+                  <td className="px-2.5 py-3 text-right tabular-nums">{pct(c.change1h)}</td>
+                  <td className="px-2.5 py-3 text-right tabular-nums">{pct(c.change24h)}</td>
+                  <td className="px-2.5 py-3 text-right tabular-nums text-navy">{c.ageDays}g</td>
+                  <td className="px-2.5 py-3 text-right">
                     <span className="rounded-full bg-berry/15 px-2 py-1 font-bold text-berry-dark tabular-nums">
                       {c.score}
                     </span>
                   </td>
-                  <td className="px-3 py-3 min-w-[170px]">
+                  <td className="px-2.5 py-3 min-w-[190px] max-w-[240px]">
                     <SafetyCell s={c.safety} />
-                  </td>
-                  <td className="px-3 py-3">
                     {c.flags.length === 0 ? (
-                      <span className="text-xs text-leaf-dark">✓ bariz uyarı yok</span>
+                      <div className="mt-1 text-xs text-leaf-dark">✓ bariz uyarı yok</div>
                     ) : (
-                      <ul className="space-y-0.5">
+                      <ul className="mt-1 space-y-0.5">
                         {c.flags.map((f, k) => (
                           <li key={k} className="text-xs text-coral-dark">• {f}</li>
                         ))}
                       </ul>
                     )}
                   </td>
-                  <td className="px-3 py-3">
+                  <td className="px-2.5 py-3">
                     <div className="flex flex-col gap-1.5">
                       <a
                         href={c.dexUrl}
@@ -413,7 +410,7 @@ export default function ScreenerPage() {
               ))}
               {!loading && (data?.candidates.length ?? 0) === 0 && !err && (
                 <tr>
-                  <td colSpan={13} className="px-3 py-10 text-center text-mute">
+                  <td colSpan={12} className="px-3 py-10 text-center text-mute">
                     Filtrelere uyan aday çıkmadı. Filtreleri gevşetip tekrar dene
                     (örn. min hacmi düşür, max yaşı artır).
                   </td>
