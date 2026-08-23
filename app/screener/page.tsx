@@ -66,6 +66,11 @@ const PRESETS = {
 
 type FilterState = { [K in keyof (typeof PRESETS)["denge"]]: number };
 
+// SOL'ün mint adresi — Jupiter linkinde "SOL" yazısı yerine bunu kullanmak
+// daha güvenilir çalışıyor.
+const SOL_MINT = "So11111111111111111111111111111111111111112";
+const jupUrl = (mint: string) => `https://jup.ag/swap/${SOL_MINT}-${mint}`;
+
 const usd = (n: number) =>
   n >= 1_000_000
     ? `$${(n / 1_000_000).toFixed(2)}M`
@@ -389,20 +394,21 @@ export default function ScreenerPage() {
                   <td className="px-2.5 py-3">
                     <div className="flex flex-col gap-1.5">
                       <a
+                        href={jupUrl(c.address)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="whitespace-nowrap rounded-full bg-leaf px-3 py-1.5 text-center text-xs font-bold text-white hover:bg-leaf-dark"
+                      >
+                        Al (Jupiter) ↗
+                      </a>
+                      <CopyButton address={c.address} />
+                      <a
                         href={c.dexUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="whitespace-nowrap rounded-full bg-white px-3 py-1.5 text-center text-xs font-semibold text-sea shadow-pop-sm hover:bg-sky-50"
                       >
                         İncele ↗
-                      </a>
-                      <a
-                        href={`https://jup.ag/swap/SOL-${c.address}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="whitespace-nowrap rounded-full bg-leaf px-3 py-1.5 text-center text-xs font-bold text-white hover:bg-leaf-dark"
-                      >
-                        Al (Jupiter) ↗
                       </a>
                     </div>
                   </td>
@@ -472,23 +478,28 @@ function MobileCard({ c, i }: { c: Candidate; i: number }) {
         </ul>
       )}
 
-      <div className="mt-3 flex gap-2">
+      <div className="mt-3 space-y-2">
         <a
-          href={c.dexUrl}
+          href={jupUrl(c.address)}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 rounded-full bg-white px-3 py-2 text-center text-xs font-semibold text-sea shadow-pop-sm"
-        >
-          İncele ↗
-        </a>
-        <a
-          href={`https://jup.ag/swap/SOL-${c.address}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 rounded-full bg-leaf px-3 py-2 text-center text-xs font-bold text-white"
+          className="block rounded-full bg-leaf px-3 py-2 text-center text-xs font-bold text-white"
         >
           Al (Jupiter) ↗
         </a>
+        <div className="flex gap-2">
+          <div className="flex-1">
+            <CopyButton address={c.address} />
+          </div>
+          <a
+            href={c.dexUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 rounded-full bg-white px-3 py-2 text-center text-xs font-semibold text-sea shadow-pop-sm"
+          >
+            İncele ↗
+          </a>
+        </div>
       </div>
     </div>
   );
@@ -500,6 +511,30 @@ function Stat({ label, value }: { label: string; value: ReactNode }) {
       <div className="text-[11px] text-mute">{label}</div>
       <div className="font-semibold text-navy tabular-nums">{value}</div>
     </div>
+  );
+}
+
+// Kontrat adresini panoya kopyalar — Jupiter'de coin seçili gelmezse
+// kullanıcı adresi "You receive" kutusuna yapıştırabilsin diye.
+function CopyButton({ address }: { address: string }) {
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(address);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // pano erişimi yoksa sessiz geç
+    }
+  };
+  return (
+    <button
+      onClick={copy}
+      title={address}
+      className="w-full whitespace-nowrap rounded-full bg-sky-100 px-3 py-1.5 text-center text-xs font-semibold text-navy hover:bg-sky-200"
+    >
+      {copied ? "✓ Kopyalandı" : "Kontrat Kopyala"}
+    </button>
   );
 }
 
