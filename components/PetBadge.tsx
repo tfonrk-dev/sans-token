@@ -1,7 +1,14 @@
+"use client";
+import { usePathname } from "next/navigation";
+
 // Small floating corner link to the kids' game (Adoption Pet) at /pet.
-// Server component — just an anchor, no client JS. Appears on the marketing
-// pages via the root layout; the static /pet and /build pages don't render it.
+// Appears on the marketing pages via the root layout; hidden on tool pages
+// like /screener so it doesn't overlap the content.
+const HIDE_ON_PREFIXES = ["/screener"];
+
 export default function PetBadge() {
+  const pathname = usePathname();
+  if (pathname && HIDE_ON_PREFIXES.some((p) => pathname.startsWith(p))) return null;
   return (
     <a
       href="/pet"
