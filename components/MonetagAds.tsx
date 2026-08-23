@@ -1,5 +1,6 @@
 "use client";
 import Script from "next/script";
+import { usePathname } from "next/navigation";
 
 // Monetag website ads (Multitag / banner tag).
 //
@@ -15,7 +16,12 @@ import Script from "next/script";
 const ZONE = process.env.NEXT_PUBLIC_MONETAG_SITE_ZONE;
 const RAW_SRC = process.env.NEXT_PUBLIC_MONETAG_SITE_SRC;
 
+// Reklamların GÖSTERİLMEYECEĞİ sayfalar (araç/uygulama sayfaları).
+const AD_FREE_PREFIXES = ["/screener"];
+
 export default function MonetagAds() {
+  const pathname = usePathname();
+  if (pathname && AD_FREE_PREFIXES.some((p) => pathname.startsWith(p))) return null;
   if (!ZONE || !RAW_SRC) return null;
   // Accept "fpyf8.com/tag.min.js", "//fpyf8.com/tag.min.js" or a full https URL.
   const src = RAW_SRC.startsWith("http") || RAW_SRC.startsWith("//") ? RAW_SRC : `//${RAW_SRC}`;
