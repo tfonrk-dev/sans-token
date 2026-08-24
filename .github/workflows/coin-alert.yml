@@ -12,7 +12,12 @@ name: Coin Alert (5 dk tarama → Telegram)
 on:
   schedule:
     - cron: "*/5 * * * *" # her 5 dk (GitHub yoğunlukta biraz geciktirebilir)
-  workflow_dispatch: {} # elle test için
+  workflow_dispatch: # elle çalıştırma
+    inputs:
+      test_ping:
+        description: "Test mesajı gönder (coin aramadan, Telegram bağlantısını doğrula)"
+        type: boolean
+        default: false
 
 concurrency:
   group: coin-alert
@@ -42,6 +47,7 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           SCREENER_BASE: ${{ vars.SCREENER_BASE }}
+          TEST_PING: ${{ inputs.test_ping }}
         run: node scripts/scan-notify.mjs
 
       # Güncellenen state'i yeni anahtarla kaydet (bir sonraki çalışma okur).

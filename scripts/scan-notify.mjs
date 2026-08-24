@@ -119,6 +119,20 @@ async function sendTelegram(text) {
 }
 
 async function main() {
+  // Test modu: coin olsun olmasın garanti bir test mesajı at (Telegram bağlantısını doğrula).
+  if (process.env.TEST_PING === "true") {
+    try {
+      await sendTelegram(
+        "✅ <b>Test başarılı</b>\nCoin bildirim sistemi çalışıyor. Artık her 5 dk'da bir yeni temiz aday bulununca buraya mesaj gelecek.\n\n⚠️ Garanti değil, yüksek risk."
+      );
+      console.log("Test mesajı gönderildi.");
+    } catch (e) {
+      console.error("Test mesajı BAŞARISIZ:", e.message);
+      process.exit(1);
+    }
+    return;
+  }
+
   const seen = await loadState();
   let candidates = [];
   try {
