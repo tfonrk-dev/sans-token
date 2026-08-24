@@ -48,6 +48,7 @@ type Filters = {
   minTxns24: number;
   limit: number;
   hideDanger: number; // 1 = güvenlik kontrolünde "tehlikeli" çıkanları gizle
+  onlyClean: number; // 1 = SADECE "✓ Temiz" olanları göster (warn/unknown da elenir)
   maxChange24: number; // 24s değişim bunun üstündeyse "zaten pumplamış" say, ele
 };
 
@@ -71,7 +72,8 @@ const DEFAULTS: Filters = {
   minTxns24: 150, // enough trades that it isn't dead
   limit: 30,
   hideDanger: 1, // güvenlik kontrolünden "tehlikeli" geçenleri varsayılan olarak gizle
-  maxChange24: 400, // 24s'te +%400'den fazla yapmışsa "tepe" riski — varsayılan ele
+  onlyClean: 1, // varsayılan: sadece "✓ Temiz" güvenlik sonucu olanları göster
+  maxChange24: 200, // erken yakalama için: +%200 üstü "zaten pumplamış" say, ele
 };
 
 const RUGCHECK = "https://api.rugcheck.xyz/v1";
@@ -115,6 +117,7 @@ function parseFilters(searchParams: URLSearchParams): Filters {
     minTxns24: g("minTxns24"),
     limit: Math.min(Math.max(Math.round(g("limit")), 1), 50),
     hideDanger: g("hideDanger") ? 1 : 0,
+    onlyClean: g("onlyClean") ? 1 : 0,
     maxChange24: g("maxChange24"),
   };
 }
@@ -387,13 +390,17 @@ export async function GET(req: Request) {
   });
 
   let withSafety = pool;
-  if (f.hideDanger) {
+  if (f.onlyClean) {
+    // Sadece "✓ Temiz": warn/unknown/danger hepsi elenir.
+    withSafety = pool.filter((c) => c.safety?.level === "good");
+  } else if (f.hideDanger) {
     withSafety = pool.filter((c) => c.safety?.level !== "danger");
   }
   const finalList = withSafety.slice(0, f.limit);
 
-  const dangerFiltered = f.hideDanger
-    ? pool.filter((c) => c.safety?.level === "danger").length
+  const dangerFiltered = pool.filter((c) => c.safety?.level === "danger").length;
+  const notCleanFiltered = f.onlyClean
+    ? pool.filter((c) => c.safety?.level !== "good").length
     : 0;
 
   return NextResponse.json({
@@ -404,6 +411,7 @@ export async function GET(req: Request) {
       passed: passed.length,
       returned: finalList.length,
       dangerFiltered,
+      notCleanFiltered,
       filters: f,
       generatedAt: Date.now(),
       source: "dexscreener.com + rugcheck.xyz",
