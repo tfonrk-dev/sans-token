@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Fredoka, Nunito } from "next/font/google";
 import "./globals.css";
-import PetBadge from "@/components/PetBadge";
+// import PetBadge from "@/components/PetBadge"; // badge hidden
 import { LangProvider } from "@/components/LangProvider";
 
 const fredoka = Fredoka({
@@ -52,7 +52,7 @@ export default function RootLayout({
           }}
         />
         <LangProvider>{children}</LangProvider>
-        <PetBadge />
+        {/* <PetBadge /> hidden — re-enable by uncommenting */}
       </body>
     </html>
   );
