@@ -1,0 +1,53 @@
+name: Coin Alert (5 dk tarama → Telegram)
+
+# Her 5 dakikada bir deployed screener'ı tarar, yeni temiz coin çıkarsa
+# Telegram'a bildirim atar. "Görülenler" listesi Actions cache'inde saklanır.
+#
+# GEREKLİ SECRETS (repo → Settings → Secrets and variables → Actions):
+#   TELEGRAM_BOT_TOKEN  - @BotFather bot token'ı
+#   TELEGRAM_CHAT_ID    - bildirim gönderilecek chat id
+# OPSİYONEL (repository variable olarak):
+#   SCREENER_BASE       - deployed site kökü (varsayılan https://sanslicekilis.com)
+
+on:
+  schedule:
+    - cron: "*/5 * * * *" # her 5 dk (GitHub yoğunlukta biraz geciktirebilir)
+  workflow_dispatch: {} # elle test için
+
+concurrency:
+  group: coin-alert
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Önceki çalışmadan "görülenler" state'ini geri yükle.
+      - name: Restore alert state
+        uses: actions/cache/restore@v4
+        with:
+          path: .alert-state
+          key: coin-alert-state-${{ github.run_id }}
+          restore-keys: |
+            coin-alert-state-
+
+      - name: Scan and notify
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          SCREENER_BASE: ${{ vars.SCREENER_BASE }}
+        run: node scripts/scan-notify.mjs
+
+      # Güncellenen state'i yeni anahtarla kaydet (bir sonraki çalışma okur).
+      - name: Save alert state
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .alert-state
+          key: coin-alert-state-${{ github.run_id }}
