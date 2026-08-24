@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Fredoka, Nunito } from "next/font/google";
 import "./globals.css";
-import MonetagAds from "@/components/MonetagAds";
 import PetBadge from "@/components/PetBadge";
 import { LangProvider } from "@/components/LangProvider";
 
@@ -54,7 +53,6 @@ export default function RootLayout({
         />
         <LangProvider>{children}</LangProvider>
         <PetBadge />
-        <MonetagAds />
       </body>
     </html>
   );
