@@ -16,6 +16,8 @@ export default function Navbar() {
     { label: t.nav.token, href: "#tokenomics" },
     { label: t.nav.roadmap, href: "#roadmap" },
     { label: t.nav.presale, href: "#presale" },
+    { label: "🔎 Screener", href: "/screener" },
+    { label: "🎁 Airdrop", href: "/airdrop" },
   ];
 
   return (
