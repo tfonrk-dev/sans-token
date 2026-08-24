@@ -50,6 +50,9 @@ type Filters = {
   hideDanger: number; // 1 = güvenlik kontrolünde "tehlikeli" çıkanları gizle
   onlyClean: number; // 1 = SADECE "✓ Temiz" olanları göster (warn/unknown da elenir)
   maxChange24: number; // 24s değişim bunun üstündeyse "zaten pumplamış" say, ele
+  maxChurn: number; // hacim/likidite oranı bunun üstündeyse "sahte hacim" say, ele
+  maxTopHolderPct: number; // en büyük tek cüzdan bunun üstündeyse ele (bilgi varsa)
+  minLpLockedPct: number; // kilitli likidite bunun altındaysa ele (bilgi varsa)
 };
 
 type Safety = {
@@ -64,16 +67,19 @@ type Safety = {
 };
 
 const DEFAULTS: Filters = {
-  minLiq: 5_000, // below this you usually can't exit a position
-  maxLiq: 400_000, // above this the 1000x window has mostly closed
-  minVol24: 20_000, // needs real trading activity
-  maxAgeDays: 14, // fresh launches only
-  maxFdv: 3_000_000, // small cap = room to run
-  minTxns24: 150, // enough trades that it isn't dead
+  minLiq: 10_000, // çıkış yapabilecek kadar likidite (güvenlik)
+  maxLiq: 250_000, // hâlâ küçük = yükselme alanı var (potansiyel)
+  minVol24: 25_000, // gerçek işlem aktivitesi
+  maxAgeDays: 10, // taze lansmanlar (erken)
+  maxFdv: 1_500_000, // küçük market cap = 1000x alanı (potansiyel)
+  minTxns24: 250, // dead değil, gerçek katılım var
   limit: 30,
   hideDanger: 1, // güvenlik kontrolünden "tehlikeli" geçenleri varsayılan olarak gizle
   onlyClean: 1, // varsayılan: sadece "✓ Temiz" güvenlik sonucu olanları göster
-  maxChange24: 200, // erken yakalama için: +%200 üstü "zaten pumplamış" say, ele
+  maxChange24: 150, // erken ama momentumlu: +%150 üstü "zaten pumplamış" say, ele
+  maxChurn: 15, // hacim/likidite > 15 → sahte hacim (wash trading) şüphesi, ele
+  maxTopHolderPct: 15, // en büyük cüzdan > %15 → dump kurulumu riski, ele
+  minLpLockedPct: 50, // kilitli likidite < %50 → rug riski, ele (bilgi varsa)
 };
 
 const RUGCHECK = "https://api.rugcheck.xyz/v1";
@@ -119,6 +125,9 @@ function parseFilters(searchParams: URLSearchParams): Filters {
     hideDanger: g("hideDanger") ? 1 : 0,
     onlyClean: g("onlyClean") ? 1 : 0,
     maxChange24: g("maxChange24"),
+    maxChurn: g("maxChurn"),
+    maxTopHolderPct: g("maxTopHolderPct"),
+    minLpLockedPct: g("minLpLockedPct"),
   };
 }
 
@@ -278,7 +287,7 @@ function score(p: DexPair): number {
   const momentum = chg1 * 0.5 + chg6 * 0.3 + chg24 * 0.2;
 
   let s = 0;
-  s += Math.min(churn, 20) * 4; // hot trading
+  s += Math.min(churn, 8) * 4; // canlı işlem — ama düşük tavan (aşırı churn = sahte hacim, ödüllendirme)
   // "Erken" ödülü: saatlik ivme iyi ama 24s zaten parabolik DEĞİLse. Amaç
   // hareketin başını yakalamak, tepesinden almak değil.
   const earlyMomentum = chg1 * 0.6 + chg6 * 0.4; // son saatlerdeki taze hareket
@@ -346,6 +355,7 @@ export async function GET(req: Request) {
     const fdv = num(p.fdv) || num(p.marketCap);
     const txns24 = num(p.txns?.h24?.buys) + num(p.txns?.h24?.sells);
     const chg24 = num(p.priceChange?.h24);
+    const churn = liq > 0 ? vol24 / liq : Infinity;
     return (
       liq >= f.minLiq &&
       liq <= f.maxLiq &&
@@ -354,7 +364,9 @@ export async function GET(req: Request) {
       ageDays(p) <= f.maxAgeDays &&
       txns24 >= f.minTxns24 &&
       // Zaten aşırı pumplamışsa (tepe riski) ele. maxChange24 <= 0 = kapalı.
-      (f.maxChange24 <= 0 || chg24 <= f.maxChange24)
+      (f.maxChange24 <= 0 || chg24 <= f.maxChange24) &&
+      // Aşırı churn = sahte hacim (wash trading) şüphesi, ele. maxChurn <= 0 = kapalı.
+      (f.maxChurn <= 0 || churn <= f.maxChurn)
     );
   });
 
@@ -396,6 +408,17 @@ export async function GET(req: Request) {
   } else if (f.hideDanger) {
     withSafety = pool.filter((c) => c.safety?.level !== "danger");
   }
+
+  // Sıkı holder/likidite eşikleri — veri VARSA uygula (null = bilinmiyor, elenmez
+  // çünkü onlyClean zaten temiz güvenlik sonucu şartını sağlıyor).
+  withSafety = withSafety.filter((c) => {
+    const top = c.safety?.topHolderPct;
+    const lp = c.safety?.lpLockedPct;
+    if (f.maxTopHolderPct > 0 && top != null && top > f.maxTopHolderPct) return false;
+    if (f.minLpLockedPct > 0 && lp != null && lp < f.minLpLockedPct) return false;
+    return true;
+  });
+
   const finalList = withSafety.slice(0, f.limit);
 
   const dangerFiltered = pool.filter((c) => c.safety?.level === "danger").length;

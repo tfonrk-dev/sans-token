@@ -60,9 +60,12 @@ type ApiResponse = {
 };
 
 const PRESETS = {
-  denge: { minLiq: 5000, maxLiq: 400000, minVol24: 20000, maxAgeDays: 14, maxFdv: 3000000, minTxns24: 150, limit: 30, hideDanger: 1, onlyClean: 1, maxChange24: 200 },
-  vahsi: { minLiq: 2000, maxLiq: 150000, minVol24: 10000, maxAgeDays: 5, maxFdv: 1000000, minTxns24: 80, limit: 30, hideDanger: 1, onlyClean: 1, maxChange24: 300 },
-  guvenli: { minLiq: 25000, maxLiq: 800000, minVol24: 80000, maxAgeDays: 21, maxFdv: 8000000, minTxns24: 400, limit: 30, hideDanger: 1, onlyClean: 1, maxChange24: 120 },
+  // Varsayılan: en sıkı güvenlik + hâlâ yükselme potansiyeli (küçük cap + erken).
+  denge: { minLiq: 10000, maxLiq: 250000, minVol24: 25000, maxAgeDays: 10, maxFdv: 1500000, minTxns24: 250, limit: 30, hideDanger: 1, onlyClean: 1, maxChange24: 150, maxChurn: 15, maxTopHolderPct: 15, minLpLockedPct: 50 },
+  // Vahşi: daha erken/riskli ama güvenlik yine sıkı.
+  vahsi: { minLiq: 6000, maxLiq: 150000, minVol24: 15000, maxAgeDays: 5, maxFdv: 800000, minTxns24: 150, limit: 30, hideDanger: 1, onlyClean: 1, maxChange24: 200, maxChurn: 20, maxTopHolderPct: 18, minLpLockedPct: 40 },
+  // En sıkı: manipülasyon sinyaline sıfır tolerans, boş gelse de.
+  guvenli: { minLiq: 20000, maxLiq: 400000, minVol24: 40000, maxAgeDays: 14, maxFdv: 2500000, minTxns24: 400, limit: 30, hideDanger: 1, onlyClean: 1, maxChange24: 100, maxChurn: 10, maxTopHolderPct: 10, minLpLockedPct: 70 },
 } as const;
 
 type FilterState = { [K in keyof (typeof PRESETS)["denge"]]: number };
@@ -283,6 +286,9 @@ export default function ScreenerPage() {
           <NumField label="Max yaş (gün)" value={filters.maxAgeDays} onChange={(v) => setField("maxAgeDays", v)} />
           <NumField label="Max FDV $" value={filters.maxFdv} onChange={(v) => setField("maxFdv", v)} />
           <NumField label="Max 24s pump %" value={filters.maxChange24} onChange={(v) => setField("maxChange24", v)} />
+          <NumField label="Max churn (hacim/likidite)" value={filters.maxChurn} onChange={(v) => setField("maxChurn", v)} />
+          <NumField label="Max en büyük cüzdan %" value={filters.maxTopHolderPct} onChange={(v) => setField("maxTopHolderPct", v)} />
+          <NumField label="Min kilitli likidite %" value={filters.minLpLockedPct} onChange={(v) => setField("minLpLockedPct", v)} />
           <NumField label="Kaç coin" value={filters.limit} onChange={(v) => setField("limit", v)} />
         </div>
 
