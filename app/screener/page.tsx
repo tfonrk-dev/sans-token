@@ -52,6 +52,7 @@ type ApiResponse = {
     passed?: number;
     returned?: number;
     dangerFiltered?: number;
+    notCleanFiltered?: number;
     filters: Record<string, number>;
     generatedAt: number;
     source?: string;
@@ -59,9 +60,9 @@ type ApiResponse = {
 };
 
 const PRESETS = {
-  denge: { minLiq: 5000, maxLiq: 400000, minVol24: 20000, maxAgeDays: 14, maxFdv: 3000000, minTxns24: 150, limit: 30, hideDanger: 1, maxChange24: 400 },
-  vahsi: { minLiq: 2000, maxLiq: 150000, minVol24: 10000, maxAgeDays: 5, maxFdv: 1000000, minTxns24: 80, limit: 30, hideDanger: 1, maxChange24: 800 },
-  guvenli: { minLiq: 25000, maxLiq: 800000, minVol24: 80000, maxAgeDays: 21, maxFdv: 8000000, minTxns24: 400, limit: 30, hideDanger: 1, maxChange24: 200 },
+  denge: { minLiq: 5000, maxLiq: 400000, minVol24: 20000, maxAgeDays: 14, maxFdv: 3000000, minTxns24: 150, limit: 30, hideDanger: 1, onlyClean: 1, maxChange24: 200 },
+  vahsi: { minLiq: 2000, maxLiq: 150000, minVol24: 10000, maxAgeDays: 5, maxFdv: 1000000, minTxns24: 80, limit: 30, hideDanger: 1, onlyClean: 1, maxChange24: 300 },
+  guvenli: { minLiq: 25000, maxLiq: 800000, minVol24: 80000, maxAgeDays: 21, maxFdv: 8000000, minTxns24: 400, limit: 30, hideDanger: 1, onlyClean: 1, maxChange24: 120 },
 } as const;
 
 type FilterState = { [K in keyof (typeof PRESETS)["denge"]]: number };
@@ -179,8 +180,9 @@ export default function ScreenerPage() {
             🔎 Solana Pump Aday Tarayıcı
           </h1>
           <p className="mt-2 max-w-2xl text-slate">
-            Küçük piyasa değerli, yeni ve hareketli Solana tokenlarını canlı
-            veriyle tarar, skora göre sıralar. Fikir:{" "}
+            Yalnızca <b>güvenlik kontrolünden geçmiş (✓ temiz)</b> ve <b>henüz
+            çok pumplamamış (erken)</b> küçük Solana tokenlarını canlı veriyle
+            listeler. Fikir:{" "}
             <b>${perCoin}'ar {data?.candidates.length ?? filters.limit} coine dağıt</b> —
             çoğu sıfırlanır, hedef 1-2 tanesinin patlaması.
           </p>
@@ -295,17 +297,17 @@ export default function ScreenerPage() {
           <label className="flex cursor-pointer items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-navy shadow-pop-sm">
             <input
               type="checkbox"
-              checked={filters.hideDanger === 1}
-              onChange={(e) => setField("hideDanger", e.target.checked ? 1 : 0)}
-              className="h-4 w-4 accent-coral"
+              checked={filters.onlyClean === 1}
+              onChange={(e) => setField("onlyClean", e.target.checked ? 1 : 0)}
+              className="h-4 w-4 accent-leaf"
             />
-            ⛔ Tehlikelileri gizle (RugCheck)
+            ✓ Sadece temiz + erken adaylar
           </label>
           {data?.meta && (
             <span className="text-sm text-mute">
-              {data.meta.scanned} token tarandı · {data.candidates.length} aday
-              {data.meta.dangerFiltered ? (
-                <> · <b className="text-coral-dark">{data.meta.dangerFiltered} tehlikeli elendi</b></>
+              {data.meta.scanned} token tarandı · {data.candidates.length} temiz aday
+              {data.meta.notCleanFiltered ? (
+                <> · <b className="text-coral-dark">{data.meta.notCleanFiltered} elendi (temiz değil/riskli)</b></>
               ) : null}{" "}
               · yaklaşık bütçe <b className="text-navy">${budget}</b> · kaynak: DexScreener + RugCheck
             </span>
