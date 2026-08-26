@@ -26,6 +26,7 @@ type Stats = {
   referrers: number;
   qualifiedReferrals: number;
   holders: number;
+  airdropDone: number;
 };
 type Data = { totalUsers: number; stats: Stats; leaderboard: Row[]; topReferrers: Row[] };
 
@@ -167,7 +168,7 @@ export default function AdminPage() {
         <Card v={s.engaged} l="Aktif Oynayan" sub={`%${pct(s.engaged, s.real)}`} accent="blue" />
         <Card v={s.wallets} l="Cüzdan Bağlı" sub={`%${pct(s.wallets, s.real)}`} accent="green" />
         <Card v={s.referrers} l="Davet Eden" sub={`${s.qualifiedReferrals} nitelikli`} accent={s.referrers ? "" : "warn"} />
-        <Card v={s.holders} l="Holder" sub="ön satış/bonus" accent="gold" />
+        <Card v={s.airdropDone} l="Airdrop ✅" sub="görev + cüzdan bitiren" accent="gold" />
       </section>
 
       <section className="panels">
