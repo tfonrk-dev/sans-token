@@ -27,6 +27,7 @@ type Stats = {
   qualifiedReferrals: number;
   holders: number;
   airdropDone: number;
+  airdropPool: number;
 };
 type Data = { totalUsers: number; stats: Stats; leaderboard: Row[]; topReferrers: Row[] };
 
@@ -189,6 +190,28 @@ export default function AdminPage() {
           <Donut pctVal={pct(s.wallets, s.real)} />
           <div className="muted">
             {s.wallets} / {s.real} oyuncu
+          </div>
+        </div>
+      </section>
+
+      <section className="panel">
+        <h2>
+          Airdrop Dağıtımı <span className="muted">— {fmt(s.airdropPool)} SANS havuz, hak kazananlar paylaşır</span>
+        </h2>
+        <div className="dist">
+          <div className="distcell">
+            <div className="dv">{fmt(s.airdropPool)}</div>
+            <div className="dl muted">Havuz (SANS)</div>
+          </div>
+          <div className="distsep">÷</div>
+          <div className="distcell">
+            <div className="dv">{fmt(s.airdropDone)}</div>
+            <div className="dl muted">Uygun kişi</div>
+          </div>
+          <div className="distsep">=</div>
+          <div className="distcell green">
+            <div className="dv">{s.airdropDone > 0 ? fmt(Math.floor(s.airdropPool / s.airdropDone)) : "—"}</div>
+            <div className="dl muted">Kişi başı ~SANS</div>
           </div>
         </div>
       </section>
@@ -399,6 +422,13 @@ tr.dim td { opacity: .5; }
   background: #1b2331; border: 1px solid #2a3444; color: #b9c2d0; }
 .tag.green { background: #0e1a12; border-color: #14532d; color: #86efac; margin: 0; }
 .tag.gold { background: #241d0c; border-color: #4d3b12; color: #fbbf24; }
+
+.dist { display: flex; align-items: center; justify-content: space-around; gap: 8px; flex-wrap: wrap; }
+.distcell { text-align: center; min-width: 90px; padding: 6px 4px; }
+.distcell.green .dv { color: #86efac; }
+.dv { font-size: 26px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.dl { font-size: 12px; margin-top: 4px; }
+.distsep { font-size: 22px; color: #8b95a5; font-weight: 700; }
 
 .note { margin-top: 4px; font-size: 13px; line-height: 1.5; }
 `;
